@@ -1,14 +1,19 @@
 <?php
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Email;
 
+use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Doctrine\ORM\EntityManager;
 
 class RequestListener
 {
+     const TWO_WAY_TRUSTED_COOKIE = 'two_way_trusted_computer';
 
     /**
      * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Email\AuthCodeManager $codeManager
@@ -32,6 +37,11 @@ class RequestListener
     private $formTemplate;
 
     /**
+     * @var EntityManager $em
+     */
+    private $em;
+
+    /**
      * Construct a request listener
      *
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Email\AuthCodeManager $helper
@@ -39,8 +49,9 @@ class RequestListener
      * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface $templating
      * @param string $formTemplate
      */
-    public function __construct(AuthCodeManager $codeManager, SecurityContextInterface $securityContext, EngineInterface $templating, $formTemplate)
+    public function __construct(EntityManager $em, AuthCodeManager $codeManager, SecurityContextInterface $securityContext, EngineInterface $templating, $formTemplate)
     {
+        $this->em = $em;
         $this->codeManager = $codeManager;
         $this->securityContext = $securityContext;
         $this->templating = $templating;
@@ -86,6 +97,11 @@ class RequestListener
                 // Redirect
                 $redirect = new RedirectResponse($request->getUri());
                 $event->setResponse($redirect);
+
+                 // Set cookie
+                 if ($request->get('_is_trusted') == true) {
+                     $this->trustComputer($redirect, $user);
+                 }
                 return;
             } else {
                 $session->getFlashBag()->set("two_factor", "scheb_two_factor.code_invalid");
@@ -96,5 +112,21 @@ class RequestListener
         $response = $this->templating->renderResponse($this->formTemplate);
         $event->setResponse($response);
     }
-}
 
+    /**
+     * @param Response $response
+     * @param TwoFactorInterface $user
+     */
+    public function trustComputer(Response $response, TwoFactorInterface $user)
+    {
+        $identifier = RandomStringGenerator::generate(32);
+        $user->setTrustedComputerIdentifier($identifier);
+
+        $this->em->persist($user);
+        $this->em->flush();
+
+        $dateTime = new \DateTime;
+        $dateTime->add(new \DateInterval("P2M")); // cookie lifetime is two month from now
+        $response->headers->setCookie(new Cookie(self::TWO_WAY_TRUSTED_COOKIE, $user->getTrustedComputerIdentifier(), $dateTime));
+    }
+}

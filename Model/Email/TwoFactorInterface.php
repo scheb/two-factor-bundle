@@ -31,4 +31,14 @@ interface TwoFactorInterface
      * @param integer $authCode
      */
     public function setEmailAuthCode($authCode);
+
+    /**
+     * @param string $trustedComputerIdentifier
+     */
+    public function setTrustedComputerIdentifier($trustedComputerIdentifier);
+
+    /**
+     * @return string
+     */
+    public function getTrustedComputerIdentifier();
 }
