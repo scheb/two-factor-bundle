@@ -44,6 +44,11 @@ class InteractiveLoginListener
             return;
         }
 
+         $isTrustedCookie = $event->getRequest()->cookies->get(RequestListener::TWO_WAY_TRUSTED_COOKIE);
+         if ( $isTrustedCookie != null && $isTrustedCookie == $user->getTrustedComputerIdentifier()) {
+             return;
+         }
+
         // Set flag in the session
         $sessionFlag = sprintf('two_factor_email_%s_%s', $token->getProviderKey(), $token->getUsername());
         $event->getRequest()->getSession()->set($sessionFlag, null);

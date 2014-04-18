@@ -22,6 +22,7 @@
 		</service>
 		<service id="scheb_two_factor.security.email.request_listener" class="%scheb_two_factor.security.email.request_listener.class%">
 			<tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="-1" />
+			<argument type="service" id="doctrine.orm.entity_manager" />
 			<argument type="service" id="scheb_two_factor.security.email.code_manager" />
 			<argument type="service" id="security.context" />
 			<argument type="service" id="templating" />

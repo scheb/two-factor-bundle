@@ -7,6 +7,7 @@
 	<p class="label"><label for="_auth_code">{{ "scheb_two_factor.auth_code"|trans }}</label></p>
 	<p class="widget"><input id="_auth_code" type="text" autocomplete="off" name="_auth_code" /></p>
 	<p class="submit"><input type="submit" value="{{ "scheb_two_factor.login"|trans }}" /></p>
+	<p class="submit"><input type="checkbox" id="_is_trusted" name="_is_trusted" value="true" /> {{ "scheb_two_factor.is_trusted_computer"|trans }}</p>
 	
 	{# The logout link gives the user a way out if they can't complete the second step #}
 	<p class="cancel"><a href="{{ path("_security_logout") }}">Cancel</a></p>
