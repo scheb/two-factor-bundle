@@ -46,9 +46,25 @@ class SchebTwoFactorExtension extends Extension
         $loader->load("security.xml");
         $loader->load("listeners.xml");
         $loader->load("persistence.xml");
+        $this->setFactoryServices($container);
 
         // Configure persister service
         $this->configurePersister($container, $config);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function setFactoryServices(ContainerBuilder $container) {
+        $def = $container->getDefinition('scheb_two_factor.entity_manager');
+        if (method_exists($def, 'setFactory')) {
+            // to be inlined in dbal.xml when dependency on Symfony DependencyInjection is bumped to 2.6
+            $def->setFactory(array(new Reference('doctrine'), 'getManager'));
+        } else {
+            // to be removed when dependency on Symfony DependencyInjection is bumped to 2.6
+            $def->setFactoryService('doctrine');
+            $def->setFactoryMethod('getManager');
+        }
     }
 
     /**
