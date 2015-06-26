@@ -83,7 +83,7 @@ class TrustedCookieManager
         $validUntil = $this->getDateTimeNow()->add(new \DateInterval("PT".$this->cookieLifetime."S"));
 
         // Add token to user entity
-        $user->addTrustedComputer($token, $validUntil);
+        $user->addTrustedComputer($token, $validUntil, $request->headers);
         $this->persister->persist($user);
 
         // Create cookie
