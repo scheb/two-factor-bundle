@@ -83,3 +83,27 @@ If a user entity has a secret code stored, you can generate a nice-looking QR co
 $url = $container->get("scheb_two_factor.security.google_authenticator")->getUrl($user);
 echo '<img src="'.$url.'" />';
 ```
+
+### Send QR code to user ###
+
+
+
+You can also send QR code to user by email. Email contains code and useful links to Google Play store, Apple store etc. This feature works only with [FOSUserBundle](https://github.com/FriendsOfSymfony/FOSUserBundle).
+
+```bash
+php app/console scheb:two-factor:send-google-secret-qr username
+```
+
+## Twig Extension ##
+
+You can render QR code for logged in user also in template.
+
+```
+<img src="{{ googleAuthenticatorQrUrl() }}">
+```
+
+Or render QR code for some other user injecting user object.
+
+```
+<img src="{{ googleAuthenticatorQrUrl($user) }}">
+```
