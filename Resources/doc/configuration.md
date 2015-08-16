@@ -36,7 +36,8 @@ scheb_two_factor:
         enabled: true                  # If Google Authenticator should be enabled, default false
         server_name: Server Name       # Server name used in QR code
         issuer: Issuer Name            # Issuer name used in QR code
-        template: AcmeDemoBundle:Authentication:form.html.twig   # Template used to render the authentication form
+        template: AcmeDemoBundle:Authentication:form.html.twig # Template used to render the authentication form
+        email_template: AcmeDemoBundle:Email:qr.html.twig      # Template used to render email with QR code
     
     # The service which is used to persist data in the user object. By default Doctrine is used. If your entity is
     # managed by something else (e.g. an API), you have to implement a custom persister
