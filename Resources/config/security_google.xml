@@ -35,5 +35,11 @@
             <argument type="service" id="scheb_two_factor.security.google_authenticator"/>
             <argument type="service" id="security.token_storage"/>
         </service>
+        <service id="scheb_two_factor.security.google.twig_extension"
+                 class="Scheb\TwoFactorBundle\Twig\TwoFactorBundleExtension">
+            <tag name="twig.extension"/>
+            <argument type="service" id="scheb_two_factor.security.google_authenticator"/>
+            <argument type="service" id="security.context"/>
+        </service>
 	</services>
 </container>

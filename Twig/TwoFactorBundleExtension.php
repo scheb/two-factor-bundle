@@ -3,7 +3,7 @@
 namespace Scheb\TwoFactorBundle\Twig;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  * Class TwoFactorBundleExtension
@@ -13,18 +13,18 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class TwoFactorBundleExtension extends \Twig_Extension
 {
     /**
-     * @var TokenStorageInterface
+     * @var SecurityContextInterface
      */
-    private $tokenStorageInterface;
+    private $securityContext;
 
     /**
      * @param GoogleAuthenticator $googleAuthenticator
-     * @param TokenStorageInterface $tokenStorageInterface
+     * @param SecurityContextInterface $securityContext
      */
-    public function __construct(GoogleAuthenticator $googleAuthenticator, TokenStorageInterface $tokenStorageInterface)
+    public function __construct(GoogleAuthenticator $googleAuthenticator, SecurityContextInterface $securityContext)
     {
         $this->googleAuthenticator = $googleAuthenticator;
-        $this->tokenStorageInterface = $tokenStorageInterface;
+        $this->securityContext = $securityContext;
     }
 
     /**
@@ -44,7 +44,7 @@ class TwoFactorBundleExtension extends \Twig_Extension
     public function googleAuthenticatorQrUrl($user = null)
     {
         if ($user === null) {
-            $user = $this->tokenStorageInterface->getToken();
+            $user = $this->securityContext->getToken()->getUser();
         }
 
         return $this->googleAuthenticator->getUrl($user);
