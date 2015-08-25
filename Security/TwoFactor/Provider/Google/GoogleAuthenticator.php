@@ -85,7 +85,6 @@ class GoogleAuthenticator
 
             $encoderURL = sprintf(
                 $urlBeforeAddition,
-                "otpauth://totp/%s@%s?secret=%s",
                 rawurlencode($user->getUsername()),
                 rawurlencode($this->server),
                 $user->getGoogleAuthenticatorSecret()
