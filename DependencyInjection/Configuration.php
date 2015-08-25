@@ -53,6 +53,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode("issuer")->defaultNull()->end()
                         ->scalarNode("server_name")->defaultNull()->end()
                         ->scalarNode("template")->defaultValue("SchebTwoFactorBundle:Authentication:form.html.twig")->end()
+                        ->scalarNode("email_template")->defaultValue("SchebTwoFactorBundle:Email:qr.html.twig")->end()
                     ->end()
                 ->end()
                 ->arrayNode("security_tokens")
