@@ -58,8 +58,16 @@ class GoogleAuthenticator
     {
         $encoder = "https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=";
         if ($this->issuer) {
+            // In the event that server is null or empty, we don't want to add the "@",
+            // this stops Google Authenticator showing "username@" when the server_name is not provided.
+            if ($this->server !== null) {
+                $urlBeforeAddition = "otpauth://totp/%s:%s@%s?secret=%s&issuer=%s";
+            } else {
+                $urlBeforeAddition = "otpauth://totp/%s:%s%s?secret=%s&issuer=%s";
+            }
+
             $encoderURL = sprintf(
-                "otpauth://totp/%s:%s@%s?secret=%s&issuer=%s",
+                $urlBeforeAddition,
                 rawurlencode($this->issuer),
                 rawurlencode($user->getUsername()),
                 rawurlencode($this->server),
@@ -67,8 +75,16 @@ class GoogleAuthenticator
                 rawurlencode($this->issuer)
             );
         } else {
+            // In the event that server is null or empty, we don't want to add the "@",
+            // this stops Google Authenticator showing "username@" when the server_name is not provided.
+            if ($this->server !== null) {
+                $urlBeforeAddition = "otpauth://totp/%s@%s?secret=%s";
+            } else {
+                $urlBeforeAddition = "otpauth://totp/%s@%s?secret=%s";
+            }
+
             $encoderURL = sprintf(
-                "otpauth://totp/%s@%s?secret=%s",
+                $urlBeforeAddition,
                 rawurlencode($user->getUsername()),
                 rawurlencode($this->server),
                 $user->getGoogleAuthenticatorSecret()
