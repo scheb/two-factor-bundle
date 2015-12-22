@@ -1,31 +1,30 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
+use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagManager;
-use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderCollection;
 use Symfony\Component\HttpFoundation\Response;
 
 class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
 {
-
     /**
-     * Manages session flags
+     * Manages session flags.
      *
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagManager $flagManager
+     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagManager
      */
     private $flagManager;
 
     /**
-     * List of two-factor providers
+     * List of two-factor providers.
      *
      * @var TwoFactorProviderCollection
      */
     private $providerCollection;
 
     /**
-     * Initialize with an array of registered two-factor providers
+     * Initialize with an array of registered two-factor providers.
      *
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagManager           $flagManager
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderCollection $providerCollection
@@ -37,7 +36,7 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
     }
 
     /**
-     * Iterate over two-factor providers and begin the two-factor authentication process
+     * Iterate over two-factor providers and begin the two-factor authentication process.
      *
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
      */
@@ -54,7 +53,8 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
      * Iterate over two-factor providers and ask for two-factor authentcation.
      * Each provider can return a response. The first response will be returned.
      *
-     * @param  \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     *
      * @return \Symfony\Component\HttpFoundation\Response|null
      */
     public function requestAuthenticationCode(AuthenticationContext $context)
@@ -78,7 +78,6 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
             }
         }
 
-        return null;
+        return;
     }
-
 }

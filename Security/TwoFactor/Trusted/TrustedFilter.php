@@ -1,44 +1,44 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
-use Symfony\Component\HttpFoundation\Response;
-use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext;
 use Scheb\TwoFactorBundle\Model\TrustedComputerInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext;
+use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class TrustedFilter implements AuthenticationHandlerInterface
 {
-
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface $authHandler
+     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface
      */
     private $authHandler;
 
     /**
-     * Manages trusted computer cookies
+     * Manages trusted computer cookies.
      *
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieManager $cookieManager
+     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieManager
      */
     private $cookieManager;
 
     /**
-     * If trusted computer feature is enabled
+     * If trusted computer feature is enabled.
      *
-     * @var boolean $useTrustedOption
+     * @var bool
      */
     private $useTrustedOption;
 
     /**
-     * @var string $trustedName
+     * @var string
      */
     private $trustedName;
 
     /**
-     * Construct the trusted computer layer
+     * Construct the trusted computer layer.
      *
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface $authHandler
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieManager   $cookieManager
-     * @param boolean                                                                  $useTrustedOption
+     * @param bool                                                                     $useTrustedOption
      * @param string                                                                   $trustedName
      */
     public function __construct(AuthenticationHandlerInterface $authHandler, TrustedCookieManager $cookieManager, $useTrustedOption, $trustedName)
@@ -50,7 +50,7 @@ class TrustedFilter implements AuthenticationHandlerInterface
     }
 
     /**
-     * Check if user is on a trusted computer, otherwise call TwoFactorProviderRegistry
+     * Check if user is on a trusted computer, otherwise call TwoFactorProviderRegistry.
      *
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
      */
@@ -70,9 +70,10 @@ class TrustedFilter implements AuthenticationHandlerInterface
     }
 
     /**
-     * Call TwoFactorProviderRegistry, set trusted computer cookie if requested
+     * Call TwoFactorProviderRegistry, set trusted computer cookie if requested.
      *
-     * @param  \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     *
      * @return \Symfony\Component\HttpFoundation\Response|null
      */
     public function requestAuthenticationCode(AuthenticationContext $context)
@@ -95,18 +96,18 @@ class TrustedFilter implements AuthenticationHandlerInterface
             return $response;
         }
 
-        return null;
+        return;
     }
 
     /**
-     * Return true when trusted computer feature can be used
+     * Return true when trusted computer feature can be used.
      *
-     * @param  mixed   $user
-     * @return boolean
+     * @param mixed $user
+     *
+     * @return bool
      */
     private function useTrustedOption($user)
     {
         return $this->useTrustedOption && $user instanceof TrustedComputerInterface;
     }
-
 }

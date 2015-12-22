@@ -2,13 +2,13 @@
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor;
 
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagManager;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderCollection;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagManager;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
- * Class Voter
+ * Class Voter.
  */
 class Voter implements VoterInterface
 {
@@ -23,10 +23,10 @@ class Voter implements VoterInterface
     protected $providerCollection;
 
     /**
-     * __construct
+     * __construct.
+     *
      * @param SessionFlagManager          $sessionFlagManager
      * @param TwoFactorProviderCollection $providers
-     * @return void
      **/
     public function __construct(SessionFlagManager $sessionFlagManager, TwoFactorProviderCollection $providerCollection)
     {
@@ -35,9 +35,11 @@ class Voter implements VoterInterface
     }
 
     /**
-     * supportsClass
+     * supportsClass.
+     *
      * @param string $class
-     * @return boolean true
+     *
+     * @return bool true
      **/
     public function supportsClass($class)
     {
@@ -45,9 +47,11 @@ class Voter implements VoterInterface
     }
 
     /**
-     * supportsAttribute
+     * supportsAttribute.
+     *
      * @param string $attribute
-     * @return boolean true
+     *
+     * @return bool true
      **/
     public function supportsAttribute($attribute)
     {
@@ -55,10 +59,12 @@ class Voter implements VoterInterface
     }
 
     /**
-     * vote
+     * vote.
+     *
      * @param TokenInterface $token
      * @param mixed          $object
      * @param array          $attributes
+     *
      * @return mixed result
      **/
     public function vote(TokenInterface $token, $object, array $attributes)
@@ -69,7 +75,7 @@ class Voter implements VoterInterface
                 return VoterInterface::ACCESS_DENIED;
             }
         }
+
         return VoterInterface::ACCESS_ABSTAIN;
     }
 }
-

@@ -1,4 +1,5 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google;
 
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
@@ -10,29 +11,28 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class TwoFactorProvider implements TwoFactorProviderInterface
 {
-
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\Validation\CodeValidatorInterface $authenticator
+     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\Validation\CodeValidatorInterface
      */
     private $authenticator;
 
     /**
-     * @var \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface $templating
+     * @var \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface
      */
     private $templating;
 
     /**
-     * @var string $formTemplate
+     * @var string
      */
     private $formTemplate;
 
     /**
-     * @var string $authCodeParameter
+     * @var string
      */
     private $authCodeParameter;
 
     /**
-     * Construct provider for Google authentication
+     * Construct provider for Google authentication.
      *
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\Validation\CodeValidatorInterface $authenticator
      * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface                                  $templating
@@ -48,10 +48,11 @@ class TwoFactorProvider implements TwoFactorProviderInterface
     }
 
     /**
-     * Begin Google authentication process
+     * Begin Google authentication process.
      *
-     * @param  \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
-     * @return boolean
+     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     *
+     * @return bool
      */
     public function beginAuthentication(AuthenticationContext $context)
     {
@@ -62,9 +63,10 @@ class TwoFactorProvider implements TwoFactorProviderInterface
     }
 
     /**
-     * Ask for Google authentication code
+     * Ask for Google authentication code.
      *
-     * @param  \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     *
      * @return \Symfony\Component\HttpFoundation\Response|null
      */
     public function requestAuthenticationCode(AuthenticationContext $context)
@@ -81,13 +83,13 @@ class TwoFactorProvider implements TwoFactorProviderInterface
 
                 return new RedirectResponse($request->getUri());
             } else {
-                $session->getFlashBag()->set("two_factor", "scheb_two_factor.code_invalid");
+                $session->getFlashBag()->set('two_factor', 'scheb_two_factor.code_invalid');
             }
         }
 
         // Force authentication code dialog
         return $this->templating->renderResponse($this->formTemplate, array(
-            'useTrustedOption' => $context->useTrustedOption()
+            'useTrustedOption' => $context->useTrustedOption(),
         ));
     }
 }

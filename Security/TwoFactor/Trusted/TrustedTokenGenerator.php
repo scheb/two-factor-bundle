@@ -1,18 +1,19 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
 class TrustedTokenGenerator
 {
-
     /**
      * @var string
      */
-    protected $charspace = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    protected $charspace = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
     /**
-     * Generate trusted computer token
+     * Generate trusted computer token.
      *
-     * @param  integer $length
+     * @param int $length
+     *
      * @return string
      */
     public function generateToken($length)
@@ -29,9 +30,9 @@ class TrustedTokenGenerator
     }
 
     /**
-     * Check if to use Symfony's SecureRandom generator
+     * Check if to use Symfony's SecureRandom generator.
      *
-     * @return boolean
+     * @return bool
      */
     protected function useSecureRandom()
     {
@@ -39,9 +40,10 @@ class TrustedTokenGenerator
     }
 
     /**
-     * Generate a secure token with Symfony's SecureRandom generator
+     * Generate a secure token with Symfony's SecureRandom generator.
      *
-     * @param  integer $length
+     * @param int $length
+     *
      * @return string
      */
     private function generateSecureToken($length)
@@ -52,19 +54,19 @@ class TrustedTokenGenerator
     }
 
     /**
-     * Generate a random string
+     * Generate a random string.
      *
-     * @param  integer $length
+     * @param int $length
+     *
      * @return string
      */
     private function generateFallbackToken($length)
     {
-        $string = "";
-        for ($p = 0; $p < $length; $p++) {
+        $string = '';
+        for ($p = 0; $p < $length; ++$p) {
             $string .= $this->charspace[mt_rand(0, strlen($this->charspace) - 1)];
         }
 
         return $string;
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -6,30 +7,30 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class AuthenticationContext
 {
-
     /**
-     * @var \Symfony\Component\HttpFoundation\Request $request
+     * @var \Symfony\Component\HttpFoundation\Request
      */
     private $request;
 
     /**
-     * @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
      */
     private $token;
 
     /**
-     * If trusted computer feature is enabled
-     * @var boolean $useTrustedOption
+     * If trusted computer feature is enabled.
+     *
+     * @var bool
      */
     private $useTrustedOption = false;
 
     /**
-     * @var boolean $authenticated
+     * @var bool
      */
     private $authenticated = false;
 
     /**
-     * Construct a two-factor authentication context
+     * Construct a two-factor authentication context.
      *
      * @param \Symfony\Component\HttpFoundation\Request                            $request
      * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
@@ -41,7 +42,7 @@ class AuthenticationContext
     }
 
     /**
-     * Return the security token
+     * Return the security token.
      *
      * @return \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
      */
@@ -51,7 +52,7 @@ class AuthenticationContext
     }
 
     /**
-     * Return the user object
+     * Return the user object.
      *
      * @return \Symfony\Component\Security\Core\Authentication\Token\mixed|null
      */
@@ -60,12 +61,12 @@ class AuthenticationContext
         if (is_object($user = $this->token->getUser())) {
             return $user;
         } else {
-            return null;
+            return;
         }
     }
 
     /**
-     * Return the request
+     * Return the request.
      *
      * @return \Symfony\Component\HttpFoundation\Request
      */
@@ -75,7 +76,7 @@ class AuthenticationContext
     }
 
     /**
-     * Return the session
+     * Return the session.
      *
      * @return \Symfony\Component\HttpFoundation\Session\SessionInterface
      */
@@ -85,9 +86,9 @@ class AuthenticationContext
     }
 
     /**
-     * Return true when trusted computer feature is enabled
+     * Return true when trusted computer feature is enabled.
      *
-     * @return boolean
+     * @return bool
      */
     public function useTrustedOption()
     {
@@ -95,9 +96,9 @@ class AuthenticationContext
     }
 
     /**
-     * Set trusted option flag
+     * Set trusted option flag.
      *
-     * @param boolean $useTrustedOption
+     * @param bool $useTrustedOption
      */
     public function setUseTrustedOption($useTrustedOption)
     {
@@ -105,9 +106,9 @@ class AuthenticationContext
     }
 
     /**
-     * Get authentication status
+     * Get authentication status.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAuthenticated()
     {
@@ -115,9 +116,9 @@ class AuthenticationContext
     }
 
     /**
-     * Set authentication status
+     * Set authentication status.
      *
-     * @param boolean $authenticated
+     * @param bool $authenticated
      */
     public function setAuthenticated($authenticated)
     {

@@ -1,13 +1,12 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Tests\DependencyInjection\Compiler;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\ProviderCompilerPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 class ProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Scheb\TwoFactorBundle\DependencyInjection\Compiler\ProviderCompilerPass
      */
@@ -37,18 +36,18 @@ class ProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
         $this->createServiceDefinition();
         $this->container
             ->expects($this->once())
-            ->method("hasDefinition")
-            ->with("scheb_two_factor.provider_collection")
+            ->method('hasDefinition')
+            ->with('scheb_two_factor.provider_collection')
             ->will($this->returnValue(true));
         $this->container
             ->expects($this->once())
-            ->method("getDefinition")
-            ->with("scheb_two_factor.provider_collection")
+            ->method('getDefinition')
+            ->with('scheb_two_factor.provider_collection')
             ->will($this->returnValue($this->definition));
         $this->container
             ->expects($this->once())
-            ->method("findTaggedServiceIds")
-            ->with("scheb_two_factor.provider")
+            ->method('findTaggedServiceIds')
+            ->with('scheb_two_factor.provider')
             ->will($this->returnValue($taggedServices));
     }
 
@@ -67,12 +66,12 @@ class ProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
         //Expect get never be called
         $this->container
             ->expects($this->once())
-            ->method("hasDefinition")
-            ->with("scheb_two_factor.provider_collection")
+            ->method('hasDefinition')
+            ->with('scheb_two_factor.provider_collection')
             ->will($this->returnValue(false));
         $this->container
             ->expects($this->never())
-            ->method("getDefinition");
+            ->method('getDefinition');
 
         $this->compilerPass->process($this->container);
     }
@@ -89,7 +88,7 @@ class ProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
         //Mock the Definition
         $this->definition
             ->expects($this->never())
-            ->method("addMethodCall");
+            ->method('addMethodCall');
 
         $this->compilerPass->process($this->container);
     }
@@ -101,15 +100,15 @@ class ProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
     {
         $this->createServiceDefinition();
         $taggedServices = array('serviceId' => array(
-            0 => array('alias' => 'providerAlias')
+            0 => array('alias' => 'providerAlias'),
         ));
         $this->stubContainerService($taggedServices);
 
         //Mock the Definition
         $this->definition
             ->expects($this->once())
-            ->method("addMethodCall")
-            ->with('addProvider', array('providerAlias', new Reference("serviceId")));
+            ->method('addMethodCall')
+            ->with('addProvider', array('providerAlias', new Reference('serviceId')));
 
         $this->compilerPass->process($this->container);
     }
@@ -122,7 +121,7 @@ class ProviderCompilerPassTest extends \PHPUnit_Framework_TestCase
     {
         $this->createServiceDefinition();
         $taggedServices = array('serviceId' => array(
-            0 => array()
+            0 => array(),
         ));
         $this->stubContainerService($taggedServices);
 

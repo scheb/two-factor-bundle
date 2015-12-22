@@ -1,13 +1,13 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator;
 
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 
 interface CodeGeneratorInterface
 {
-
     /**
-     * Generate a new authentication code an send it to the user
+     * Generate a new authentication code an send it to the user.
      *
      * @param \Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface $user
      */

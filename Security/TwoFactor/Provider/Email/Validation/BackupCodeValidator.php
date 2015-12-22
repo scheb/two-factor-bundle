@@ -1,4 +1,5 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Validation;
 
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
@@ -7,7 +8,6 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeValidator as Basic
 
 class BackupCodeValidator implements CodeValidatorInterface
 {
-
     /**
      * @var string
      */
@@ -19,7 +19,7 @@ class BackupCodeValidator implements CodeValidatorInterface
     private $validator;
 
     /**
-     * Initialize with the name of the auth code parameter
+     * Initialize with the name of the auth code parameter.
      *
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeValidator                       $backupCodeValidator
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Validation\CodeValidatorInterface $validator
@@ -31,10 +31,11 @@ class BackupCodeValidator implements CodeValidatorInterface
     }
 
     /**
-     * Validates the code, which was entered by the user
+     * Validates the code, which was entered by the user.
      *
-     * @param  \Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface $user
-     * @param  integer                                               $code
+     * @param \Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface $user
+     * @param int                                                   $code
+     *
      * @return bool
      */
     public function checkCode(TwoFactorInterface $user, $code)

@@ -1,37 +1,37 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\EventListener;
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\Security\Core\SecurityContextInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class RequestListener
 {
-
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface $authHandler
+     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface
      */
     private $authHandler;
 
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
+     * @var \Symfony\Component\Security\Core\SecurityContextInterface
      */
     private $securityContext;
 
     /**
-     * @var array $supportedTokens
+     * @var array
      */
     private $supportedTokens;
 
     /**
-     * @var string $excludePattern
+     * @var string
      */
     private $excludePattern;
 
     /**
-     * Construct a listener for login events
+     * Construct a listener for login events.
      *
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface $authHandler
      * @param \Symfony\Component\Security\Core\SecurityContextInterface                $securityContext
@@ -47,7 +47,7 @@ class RequestListener
     }
 
     /**
-     * Listen for request events
+     * Listen for request events.
      *
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
@@ -56,7 +56,7 @@ class RequestListener
         $request = $event->getRequest();
 
         // Exclude path
-        if ($this->excludePattern !== null && preg_match("#".$this->excludePattern."#", $request->getPathInfo())) {
+        if ($this->excludePattern !== null && preg_match('#'.$this->excludePattern.'#', $request->getPathInfo())) {
             return;
         }
 
@@ -78,10 +78,11 @@ class RequestListener
     }
 
     /**
-     * Check if the token class is supported
+     * Check if the token class is supported.
      *
-     * @param  mixed   $token
-     * @return boolean
+     * @param mixed $token
+     *
+     * @return bool
      */
     private function isTokenSupported($token)
     {
