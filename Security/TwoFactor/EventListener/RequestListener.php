@@ -6,7 +6,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class RequestListener
 {
@@ -16,9 +16,9 @@ class RequestListener
     private $authHandler;
 
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     * @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
      */
-    private $securityContext;
+    private $tokenStorage;
 
     /**
      * @var array
@@ -33,15 +33,15 @@ class RequestListener
     /**
      * Construct a listener for login events.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface $authHandler
-     * @param \Symfony\Component\Security\Core\SecurityContextInterface                $securityContext
-     * @param array                                                                    $supportedTokens
-     * @param string                                                                   $excludePattern
+     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface            $authHandler
+     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokenStorage
+     * @param array                                                                               $supportedTokens
+     * @param string                                                                              $excludePattern
      */
-    public function __construct(AuthenticationHandlerInterface $authHandler, SecurityContextInterface $securityContext, array $supportedTokens, $excludePattern)
+    public function __construct(AuthenticationHandlerInterface $authHandler, TokenStorageInterface $tokenStorage, array $supportedTokens, $excludePattern)
     {
         $this->authHandler = $authHandler;
-        $this->securityContext = $securityContext;
+        $this->tokenStorage = $tokenStorage;
         $this->supportedTokens = $supportedTokens;
         $this->excludePattern = $excludePattern;
     }
@@ -61,7 +61,7 @@ class RequestListener
         }
 
         // Check if security token is supported
-        $token = $this->securityContext->getToken();
+        $token = $this->tokenStorage->getToken();
         if (!$this->isTokenSupported($token)) {
             return;
         }
