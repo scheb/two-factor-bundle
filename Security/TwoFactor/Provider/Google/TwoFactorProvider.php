@@ -35,16 +35,24 @@ class TwoFactorProvider implements TwoFactorProviderInterface
      * Construct provider for Google authentication.
      *
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\Validation\CodeValidatorInterface $authenticator
-     * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface                                  $templating
      * @param string                                                                                      $formTemplate
      * @param string                                                                                      $authCodeParameter
      */
-    public function __construct(CodeValidatorInterface $authenticator, EngineInterface $templating, $formTemplate, $authCodeParameter)
+    public function __construct(CodeValidatorInterface $authenticator, $formTemplate, $authCodeParameter)
     {
         $this->authenticator = $authenticator;
-        $this->templating = $templating;
         $this->formTemplate = $formTemplate;
         $this->authCodeParameter = $authCodeParameter;
+    }
+
+    /**
+     * Set templating engin to avoid cirular reference when injecting in the constructor.
+     *
+     * @param EngineInterface $templating
+     */
+    public function setTemplatingEngine(EngineInterface $templating)
+    {
+        $this->templating = $templating;
     }
 
     /**
