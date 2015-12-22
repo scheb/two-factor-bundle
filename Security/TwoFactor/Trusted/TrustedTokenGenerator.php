@@ -18,55 +18,6 @@ class TrustedTokenGenerator
      */
     public function generateToken($length)
     {
-        // Symfony >= 2.2: Use SecureRandom class
-        if ($this->useSecureRandom()) {
-            return $this->generateSecureToken($length);
-        }
-
-        // Everything else: Use less secure string generator
-        else {
-            return $this->generateFallbackToken($length);
-        }
-    }
-
-    /**
-     * Check if to use Symfony's SecureRandom generator.
-     *
-     * @return bool
-     */
-    protected function useSecureRandom()
-    {
-        return class_exists("Symfony\Component\Security\Core\Util\SecureRandom");
-    }
-
-    /**
-     * Generate a secure token with Symfony's SecureRandom generator.
-     *
-     * @param int $length
-     *
-     * @return string
-     */
-    private function generateSecureToken($length)
-    {
-        $generator = new \Symfony\Component\Security\Core\Util\SecureRandom();
-
-        return substr(base64_encode($generator->nextBytes($length)), 0, $length);
-    }
-
-    /**
-     * Generate a random string.
-     *
-     * @param int $length
-     *
-     * @return string
-     */
-    private function generateFallbackToken($length)
-    {
-        $string = '';
-        for ($p = 0; $p < $length; ++$p) {
-            $string .= $this->charspace[mt_rand(0, strlen($this->charspace) - 1)];
-        }
-
-        return $string;
+        return substr(base64_encode(random_bytes($length)), 0, $length);
     }
 }
