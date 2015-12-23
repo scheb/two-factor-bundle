@@ -14,12 +14,12 @@ class Voter implements VoterInterface
 {
     /**
      * @var SessionFlagManager
-     **/
+     */
     protected $sessionFlagManager;
 
     /**
      * @var TwoFactorProviderCollection
-     **/
+     */
     protected $providerCollection;
 
     /**
@@ -27,7 +27,7 @@ class Voter implements VoterInterface
      *
      * @param SessionFlagManager          $sessionFlagManager
      * @param TwoFactorProviderCollection $providers
-     **/
+     */
     public function __construct(SessionFlagManager $sessionFlagManager, TwoFactorProviderCollection $providerCollection)
     {
         $this->sessionFlagManager = $sessionFlagManager;
@@ -40,7 +40,7 @@ class Voter implements VoterInterface
      * @param string $class
      *
      * @return bool true
-     **/
+     */
     public function supportsClass($class)
     {
         return true;
@@ -52,7 +52,7 @@ class Voter implements VoterInterface
      * @param string $attribute
      *
      * @return bool true
-     **/
+     */
     public function supportsAttribute($attribute)
     {
         return true;
@@ -66,7 +66,7 @@ class Voter implements VoterInterface
      * @param array          $attributes
      *
      * @return mixed result
-     **/
+     */
     public function vote(TokenInterface $token, $object, array $attributes)
     {
         foreach ($this->providerCollection->getProviders() as $providerName => $provider) {

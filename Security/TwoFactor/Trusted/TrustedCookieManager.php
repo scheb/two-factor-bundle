@@ -15,7 +15,7 @@ class TrustedCookieManager
     private $persister;
 
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedTokenGenerator
+     * @var TrustedTokenGenerator
      */
     private $tokenGenerator;
 
@@ -32,10 +32,10 @@ class TrustedCookieManager
     /**
      * Construct a manager for the trusted cookie.
      *
-     * @param \Scheb\TwoFactorBundle\Model\PersisterInterface                         $persister
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedTokenGenerator $tokenGenerator
-     * @param string                                                                  $cookieName
-     * @param int                                                                     $cookieLifetime
+     * @param PersisterInterface    $persister
+     * @param TrustedTokenGenerator $tokenGenerator
+     * @param string                $cookieName
+     * @param int                   $cookieLifetime
      */
     public function __construct(PersisterInterface $persister, TrustedTokenGenerator $tokenGenerator, $cookieName, $cookieLifetime)
     {
@@ -48,8 +48,8 @@ class TrustedCookieManager
     /**
      * Check if request has trusted cookie and if it's valid.
      *
-     * @param \Scheb\TwoFactorBundle\Model\TrustedComputerInterface $user
-     * @param \Symfony\Component\HttpFoundation\Request             $request
+     * @param TrustedComputerInterface $user
+     * @param Request                  $request
      */
     public function isTrustedComputer(Request $request, TrustedComputerInterface $user)
     {
@@ -70,8 +70,8 @@ class TrustedCookieManager
     /**
      * Create a cookie for trusted computer.
      *
-     * @param \Scheb\TwoFactorBundle\Model\TrustedComputerInterface $user
-     * @param \Symfony\Component\HttpFoundation\Request             $request
+     * @param TrustedComputerInterface $user
+     * @param Request                  $request
      */
     public function createTrustedCookie(Request $request, TrustedComputerInterface $user)
     {

@@ -9,8 +9,8 @@ interface CodeValidatorInterface
     /**
      * Validates the code, which was entered by the user.
      *
-     * @param \Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface $user
-     * @param int                                                   $code
+     * @param TwoFactorInterface $user
+     * @param int                $code
      *
      * @return bool
      */

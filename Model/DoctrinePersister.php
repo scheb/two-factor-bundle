@@ -7,14 +7,14 @@ use Doctrine\ORM\EntityManager;
 class DoctrinePersister implements PersisterInterface
 {
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var EntityManager
      */
     private $em;
 
     /**
      * Initialize a persister for doctrine entities.
      *
-     * @param \Doctrine\ORM\EntityManager $em
+     * @param EntityManager $em
      */
     public function __construct(EntityManager $em)
     {

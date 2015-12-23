@@ -13,17 +13,17 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class TwoFactorProvider implements TwoFactorProviderInterface
 {
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface
+     * @var CodeGeneratorInterface
      */
     private $codeGenerator;
 
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Validation\CodeValidatorInterface
+     * @var CodeValidatorInterface
      */
     private $authenticator;
 
     /**
-     * @var \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface
+     * @var EngineInterface
      */
     private $templating;
 
@@ -40,10 +40,10 @@ class TwoFactorProvider implements TwoFactorProviderInterface
     /**
      * Construct provider for email authentication.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface  $codeGenerator
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Validation\CodeValidatorInterface $authenticator
-     * @param string                                                                                     $formTemplate
-     * @param string                                                                                     $authCodeParameter
+     * @param CodeGeneratorInterface $codeGenerator
+     * @param CodeValidatorInterface $authenticator
+     * @param string                 $formTemplate
+     * @param string                 $authCodeParameter
      */
     public function __construct(CodeGeneratorInterface $codeGenerator, CodeValidatorInterface $authenticator, $formTemplate, $authCodeParameter)
     {
@@ -66,7 +66,7 @@ class TwoFactorProvider implements TwoFactorProviderInterface
     /**
      * Begin email authentication process.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param AuthenticationContext $context
      *
      * @return bool
      */
@@ -87,7 +87,7 @@ class TwoFactorProvider implements TwoFactorProviderInterface
     /**
      * Ask for email authentication code.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param AuthenticationContext $context
      *
      * @return \Symfony\Component\HttpFoundation\Response|null
      */

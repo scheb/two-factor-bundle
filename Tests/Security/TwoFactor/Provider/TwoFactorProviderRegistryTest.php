@@ -25,7 +25,7 @@ class TwoFactorProviderRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderCollection
-     **/
+     */
     protected $collection;
 
     public function setUp()

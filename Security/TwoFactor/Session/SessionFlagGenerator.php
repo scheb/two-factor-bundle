@@ -10,7 +10,7 @@ class SessionFlagGenerator
      * Generate session token.
      *
      * @param  string Two-factor provider name
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @param TokenInterface $token
      *
      * @return string
      */

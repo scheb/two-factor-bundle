@@ -11,12 +11,12 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class RequestListener
 {
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface
+     * @var AuthenticationHandlerInterface
      */
     private $authHandler;
 
     /**
-     * @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
+     * @var TokenStorageInterface
      */
     private $tokenStorage;
 
@@ -33,10 +33,10 @@ class RequestListener
     /**
      * Construct a listener for login events.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface            $authHandler
-     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokenStorage
-     * @param array                                                                               $supportedTokens
-     * @param string                                                                              $excludePattern
+     * @param AuthenticationHandlerInterface $authHandler
+     * @param TokenStorageInterface          $tokenStorage
+     * @param array                          $supportedTokens
+     * @param string                         $excludePattern
      */
     public function __construct(AuthenticationHandlerInterface $authHandler, TokenStorageInterface $tokenStorage, array $supportedTokens, $excludePattern)
     {
@@ -49,7 +49,7 @@ class RequestListener
     /**
      * Listen for request events.
      *
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     * @param GetResponseEvent $event
      */
     public function onCoreRequest(GetResponseEvent $event)
     {

@@ -15,12 +15,12 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderCollection
-     **/
+     */
     protected $providerCollection;
 
     /**
      * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Voter
-     **/
+     */
     protected $voter;
 
     public function setUp()
@@ -63,7 +63,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function vote_notAuthenticated_withProviders()
     {
         $token = $this->getToken();
@@ -84,7 +84,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function vote_notAuthenticated_noProviders()
     {
         $token = $this->getToken();
@@ -103,7 +103,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function vote_authenticated_withProviders()
     {
         $token = $this->getToken();
@@ -126,7 +126,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function vote_authenticated_noProviders()
     {
         $token = $this->getToken();
@@ -147,7 +147,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function voter_supportsClass()
     {
         $token = $this->getToken();
@@ -164,7 +164,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function voter_supportsAttribute()
     {
         $token = $this->getToken();

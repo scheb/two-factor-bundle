@@ -8,14 +8,14 @@ use Scheb\TwoFactorBundle\Model\PersisterInterface;
 class BackupCodeValidator
 {
     /**
-     * @var \Scheb\TwoFactorBundle\Model\PersisterInterface
+     * @var PersisterInterface
      */
     private $persister;
 
     /**
      * Construct a validator for backup codes.
      *
-     * @param \Scheb\TwoFactorBundle\Model\PersisterInterface $persister
+     * @param PersisterInterface $persister
      */
     public function __construct(PersisterInterface $persister)
     {
@@ -25,8 +25,8 @@ class BackupCodeValidator
     /**
      * Check if code is a valid backup code.
      *
-     * @param \Scheb\TwoFactorBundle\Model\BackupCodeInterface $user
-     * @param string                                           $code
+     * @param BackupCodeInterface $user
+     * @param string              $code
      *
      * @return bool
      */

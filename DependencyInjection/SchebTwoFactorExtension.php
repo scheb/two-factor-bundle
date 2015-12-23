@@ -54,8 +54,8 @@ class SchebTwoFactorExtension extends Extension
     /**
      * Configure the persister service.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param array                                                   $config
+     * @param ContainerBuilder $container
+     * @param array            $config
      *
      * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
@@ -84,8 +84,8 @@ class SchebTwoFactorExtension extends Extension
     /**
      * Configure email two-factor authentication.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param array                                                   $config
+     * @param ContainerBuilder $container
+     * @param array            $config
      */
     private function configureEmail(ContainerBuilder $container, $config)
     {
@@ -101,7 +101,7 @@ class SchebTwoFactorExtension extends Extension
     /**
      * Configure Google Authenticator two-factor authentication.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function configureGoogle(ContainerBuilder $container)
     {

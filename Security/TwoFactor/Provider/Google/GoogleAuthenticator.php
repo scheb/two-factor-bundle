@@ -13,7 +13,7 @@ class GoogleAuthenticator
     private $server;
 
     /**
-     * @var \Google\Authenticator\GoogleAuthenticator
+     * @var GoogleAuthenticator
      */
     private $authenticator;
 
@@ -25,9 +25,9 @@ class GoogleAuthenticator
     /**
      * Construct the helper service for Google Authenticator.
      *
-     * @param \Google\Authenticator\GoogleAuthenticator $authenticator
-     * @param string                                    $server
-     * @param string                                    $issuer
+     * @param GoogleAuthenticator $authenticator
+     * @param string              $server
+     * @param string              $issuer
      */
     public function __construct(BaseGoogleAuthenticator $authenticator, $server, $issuer)
     {
@@ -39,8 +39,8 @@ class GoogleAuthenticator
     /**
      * Validates the code, which was entered by the user.
      *
-     * @param \Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface $user
-     * @param string                                                 $code
+     * @param TwoFactorInterface $user
+     * @param string             $code
      *
      * @return bool
      */
@@ -52,7 +52,7 @@ class GoogleAuthenticator
     /**
      * Generate the URL of a QR code, which can be scanned by Google Authenticator app.
      *
-     * @param \Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface $user
+     * @param TwoFactorInterface $user
      *
      * @return string
      */

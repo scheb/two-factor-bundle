@@ -12,12 +12,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class TwoFactorProvider implements TwoFactorProviderInterface
 {
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\Validation\CodeValidatorInterface
+     * @var CodeValidatorInterface
      */
     private $authenticator;
 
     /**
-     * @var \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface
+     * @var EngineInterface
      */
     private $templating;
 
@@ -34,9 +34,9 @@ class TwoFactorProvider implements TwoFactorProviderInterface
     /**
      * Construct provider for Google authentication.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\Validation\CodeValidatorInterface $authenticator
-     * @param string                                                                                      $formTemplate
-     * @param string                                                                                      $authCodeParameter
+     * @param CodeValidatorInterface $authenticator
+     * @param string                 $formTemplate
+     * @param string                 $authCodeParameter
      */
     public function __construct(CodeValidatorInterface $authenticator, $formTemplate, $authCodeParameter)
     {
@@ -58,7 +58,7 @@ class TwoFactorProvider implements TwoFactorProviderInterface
     /**
      * Begin Google authentication process.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param AuthenticationContext $context
      *
      * @return bool
      */
@@ -73,7 +73,7 @@ class TwoFactorProvider implements TwoFactorProviderInterface
     /**
      * Ask for Google authentication code.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param AuthenticationContext $context
      *
      * @return \Symfony\Component\HttpFoundation\Response|null
      */
@@ -90,9 +90,9 @@ class TwoFactorProvider implements TwoFactorProviderInterface
                 $context->setAuthenticated(true);
 
                 return new RedirectResponse($request->getUri());
-            } else {
-                $session->getFlashBag()->set('two_factor', 'scheb_two_factor.code_invalid');
             }
+
+            $session->getFlashBag()->set('two_factor', 'scheb_two_factor.code_invalid');
         }
 
         // Force authentication code dialog

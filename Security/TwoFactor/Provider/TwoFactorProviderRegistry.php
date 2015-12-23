@@ -12,7 +12,7 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
     /**
      * Manages session flags.
      *
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagManager
+     * @var SessionFlagManager
      */
     private $flagManager;
 
@@ -26,8 +26,8 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
     /**
      * Initialize with an array of registered two-factor providers.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagManager           $flagManager
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderCollection $providerCollection
+     * @param SessionFlagManager          $flagManager
+     * @param TwoFactorProviderCollection $providerCollection
      */
     public function __construct(SessionFlagManager $flagManager, TwoFactorProviderCollection $providerCollection)
     {
@@ -38,7 +38,7 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
     /**
      * Iterate over two-factor providers and begin the two-factor authentication process.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param AuthenticationContext $context
      */
     public function beginAuthentication(AuthenticationContext $context)
     {
@@ -53,7 +53,7 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
      * Iterate over two-factor providers and ask for two-factor authentcation.
      * Each provider can return a response. The first response will be returned.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param AuthenticationContext $context
      *
      * @return \Symfony\Component\HttpFoundation\Response|null
      */

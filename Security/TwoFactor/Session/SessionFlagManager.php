@@ -3,24 +3,25 @@
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Session;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class SessionFlagManager
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+     * @var SessionInterface
      */
     private $session;
 
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagGenerator
+     * @var SessionFlagGenerator
      */
     private $flagGenerator;
 
     /**
      * Construct a manager that takes care of session flags.
      *
-     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface             $session
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagGenerator $flagGenerator
+     * @param SessionInterface     $session
+     * @param SessionFlagGenerator $flagGenerator
      */
     public function __construct(SessionInterface $session, SessionFlagGenerator $flagGenerator)
     {
@@ -31,10 +32,10 @@ class SessionFlagManager
     /**
      * Set session flag to ask for two-factor authentication.
      *
-     * @param string                                                               $provider
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @param string         $provider
+     * @param TokenInterface $token
      */
-    public function setBegin($provider, $token)
+    public function setBegin($provider, TokenInterface $token)
     {
         $sessionFlag = $this->getSessionFlag($provider, $token);
         $this->session->set($sessionFlag, false);
@@ -43,10 +44,10 @@ class SessionFlagManager
     /**
      * Set session flag completed.
      *
-     * @param string                                                               $provider
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @param string         $provider
+     * @param TokenInterface $token
      */
-    public function setComplete($provider, $token)
+    public function setComplete($provider, TokenInterface $token)
     {
         $sessionFlag = $this->getSessionFlag($provider, $token);
 
@@ -56,12 +57,12 @@ class SessionFlagManager
     /**
      * Check if session flag is set and is not complete.
      *
-     * @param string                                                               $provider
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @param string         $provider
+     * @param TokenInterface $token
      *
      * @return bool
      */
-    public function isNotAuthenticated($provider, $token)
+    public function isNotAuthenticated($provider, TokenInterface $token)
     {
         $sessionFlag = $this->getSessionFlag($provider, $token);
 
@@ -72,11 +73,11 @@ class SessionFlagManager
      * Generate session token.
      *
      * @param  string Two-factor provider name
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @param TokenInterface $token
      *
      * @return string
      */
-    protected function getSessionFlag($provider, $token)
+    protected function getSessionFlag($provider, TokenInterface $token)
     {
         return $this->flagGenerator->getSessionFlag($provider, $token);
     }

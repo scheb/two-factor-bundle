@@ -10,14 +10,14 @@ use Symfony\Component\HttpFoundation\Response;
 class TrustedFilter implements AuthenticationHandlerInterface
 {
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface
+     * @var AuthenticationHandlerInterface
      */
     private $authHandler;
 
     /**
      * Manages trusted computer cookies.
      *
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieManager
+     * @var TrustedCookieManager
      */
     private $cookieManager;
 
@@ -36,10 +36,10 @@ class TrustedFilter implements AuthenticationHandlerInterface
     /**
      * Construct the trusted computer layer.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface $authHandler
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieManager   $cookieManager
-     * @param bool                                                                     $useTrustedOption
-     * @param string                                                                   $trustedName
+     * @param AuthenticationHandlerInterface $authHandler
+     * @param TrustedCookieManager           $cookieManager
+     * @param bool                           $useTrustedOption
+     * @param string                         $trustedName
      */
     public function __construct(AuthenticationHandlerInterface $authHandler, TrustedCookieManager $cookieManager, $useTrustedOption, $trustedName)
     {
@@ -52,7 +52,7 @@ class TrustedFilter implements AuthenticationHandlerInterface
     /**
      * Check if user is on a trusted computer, otherwise call TwoFactorProviderRegistry.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param AuthenticationContext $context
      */
     public function beginAuthentication(AuthenticationContext $context)
     {
@@ -72,9 +72,9 @@ class TrustedFilter implements AuthenticationHandlerInterface
     /**
      * Call TwoFactorProviderRegistry, set trusted computer cookie if requested.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param AuthenticationContext $context
      *
-     * @return \Symfony\Component\HttpFoundation\Response|null
+     * @return Response|null
      */
     public function requestAuthenticationCode(AuthenticationContext $context)
     {

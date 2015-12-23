@@ -8,12 +8,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 class AuthenticationContext
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var Request
      */
     private $request;
 
     /**
-     * @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
+     * @var TokenInterface
      */
     private $token;
 
@@ -32,8 +32,8 @@ class AuthenticationContext
     /**
      * Construct a two-factor authentication context.
      *
-     * @param \Symfony\Component\HttpFoundation\Request                            $request
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @param Request        $request
+     * @param TokenInterface $token
      */
     public function __construct(Request $request, TokenInterface $token)
     {
@@ -44,7 +44,7 @@ class AuthenticationContext
     /**
      * Return the security token.
      *
-     * @return \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
+     * @return TokenInterface
      */
     public function getToken()
     {
@@ -60,15 +60,15 @@ class AuthenticationContext
     {
         if (is_object($user = $this->token->getUser())) {
             return $user;
-        } else {
-            return;
         }
+
+        return;
     }
 
     /**
      * Return the request.
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return Request
      */
     public function getRequest()
     {

@@ -8,14 +8,14 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator
 class GoogleCodeValidator implements CodeValidatorInterface
 {
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator
+     * @var GoogleAuthenticator
      */
     private $authenticator;
 
     /**
      * Construct a validator for Google Authenticator code.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator $authenticator
+     * @param GoogleAuthenticator $authenticator
      */
     public function __construct(GoogleAuthenticator $authenticator)
     {
@@ -25,8 +25,8 @@ class GoogleCodeValidator implements CodeValidatorInterface
     /**
      * Validates the code, which was entered by the user.
      *
-     * @param \Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface $user
-     * @param int                                                    $code
+     * @param TwoFactorInterface $user
+     * @param int                $code
      *
      * @return bool
      */

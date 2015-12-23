@@ -9,7 +9,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 class InteractiveLoginListener
 {
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface
+     * @var AuthenticationHandlerInterface
      */
     private $authHandler;
 
@@ -21,8 +21,8 @@ class InteractiveLoginListener
     /**
      * Construct a listener for login events.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface $authHandler
-     * @param array                                                                    $supportedTokens
+     * @param AuthenticationHandlerInterface $authHandler
+     * @param array                          $supportedTokens
      */
     public function __construct(AuthenticationHandlerInterface $authHandler, array $supportedTokens)
     {
@@ -33,7 +33,7 @@ class InteractiveLoginListener
     /**
      * Listen for successful login events.
      *
-     * @param \Symfony\Component\Security\Http\Event\InteractiveLoginEvent $event
+     * @param InteractiveLoginEvent $event
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {

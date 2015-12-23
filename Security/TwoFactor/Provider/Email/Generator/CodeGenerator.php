@@ -9,12 +9,12 @@ use Scheb\TwoFactorBundle\Model\PersisterInterface;
 class CodeGenerator implements CodeGeneratorInterface
 {
     /**
-     * @var \Scheb\TwoFactorBundle\Model\PersisterInterface
+     * @var PersisterInterface
      */
     private $persister;
 
     /**
-     * @var \Scheb\TwoFactorBundle\Mailer\AuthCodeMailerInterface
+     * @var AuthCodeMailerInterface
      */
     private $mailer;
 
@@ -28,9 +28,9 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * Construct the code generator service.
      *
-     * @param \Scheb\TwoFactorBundle\Model\PersisterInterface       $persister
-     * @param \Scheb\TwoFactorBundle\Mailer\AuthCodeMailerInterface $mailer
-     * @param int                                                   $digits
+     * @param PersisterInterface      $persister
+     * @param AuthCodeMailerInterface $mailer
+     * @param int                     $digits
      */
     public function __construct(PersisterInterface $persister, AuthCodeMailerInterface $mailer, $digits)
     {
@@ -42,7 +42,7 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * Generate a new authentication code an send it to the user.
      *
-     * @param \Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface $user
+     * @param TwoFactorInterface $user
      */
     public function generateAndSend(TwoFactorInterface $user)
     {

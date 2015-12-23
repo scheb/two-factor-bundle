@@ -9,7 +9,7 @@ class TwoFactorProviderCollection
 {
     /**
      * @var array
-     **/
+     */
     protected $providers = array();
 
     /**
@@ -17,7 +17,7 @@ class TwoFactorProviderCollection
      *
      * @param string $name
      * @param mixed  $provider
-     **/
+     */
     public function addProvider($name, $provider)
     {
         $this->providers[$name] = $provider;
@@ -27,7 +27,7 @@ class TwoFactorProviderCollection
      * getProviders.
      *
      * @return array
-     **/
+     */
     public function getProviders()
     {
         return $this->providers;
