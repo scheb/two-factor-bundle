@@ -1,4 +1,5 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email;
 
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
@@ -11,55 +12,63 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class TwoFactorProvider implements TwoFactorProviderInterface
 {
-
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface
+     * @var CodeGeneratorInterface
      */
     private $codeGenerator;
 
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Validation\CodeValidatorInterface $authenticator
+     * @var CodeValidatorInterface
      */
     private $authenticator;
 
     /**
-     * @var \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface $templating
+     * @var EngineInterface
      */
     private $templating;
 
     /**
-     * @var string $formTemplate
+     * @var string
      */
     private $formTemplate;
 
     /**
-     * @var string $authCodeParameter
+     * @var string
      */
     private $authCodeParameter;
 
     /**
-     * Construct provider for email authentication
+     * Construct provider for email authentication.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface  $codeGenerator
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Validation\CodeValidatorInterface $authenticator
-     * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface                                 $templating
-     * @param string                                                                                     $formTemplate
-     * @param string                                                                                     $authCodeParameter
+     * @param CodeGeneratorInterface $codeGenerator
+     * @param CodeValidatorInterface $authenticator
+     * @param string                 $formTemplate
+     * @param string                 $authCodeParameter
      */
-    public function __construct(CodeGeneratorInterface $codeGenerator, CodeValidatorInterface $authenticator, EngineInterface $templating, $formTemplate, $authCodeParameter)
+    public function __construct(CodeGeneratorInterface $codeGenerator, CodeValidatorInterface $authenticator, $formTemplate, $authCodeParameter)
     {
         $this->codeGenerator = $codeGenerator;
         $this->authenticator = $authenticator;
-        $this->templating = $templating;
         $this->formTemplate = $formTemplate;
         $this->authCodeParameter = $authCodeParameter;
     }
 
     /**
-     * Begin email authentication process
+     * Set templating engin to avoid cirular reference when injecting in the constructor.
      *
-     * @param  \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
-     * @return boolean
+     * @param EngineInterface $templating
+     */
+    public function setTemplatingEngine(EngineInterface $templating)
+    {
+        $this->templating = $templating;
+    }
+
+    /**
+     * Begin email authentication process.
+     *
+     * @param AuthenticationContext $context
+     *
+     * @return bool
      */
     public function beginAuthentication(AuthenticationContext $context)
     {
@@ -76,9 +85,10 @@ class TwoFactorProvider implements TwoFactorProviderInterface
     }
 
     /**
-     * Ask for email authentication code
+     * Ask for email authentication code.
      *
-     * @param  \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param AuthenticationContext $context
+     *
      * @return \Symfony\Component\HttpFoundation\Response|null
      */
     public function requestAuthenticationCode(AuthenticationContext $context)
@@ -95,14 +105,13 @@ class TwoFactorProvider implements TwoFactorProviderInterface
 
                 return new RedirectResponse($request->getUri());
             } else {
-                $session->getFlashBag()->set("two_factor", "scheb_two_factor.code_invalid");
+                $session->getFlashBag()->set('two_factor', 'scheb_two_factor.code_invalid');
             }
         }
 
         // Force authentication code dialog
         return $this->templating->renderResponse($this->formTemplate, array(
-            'useTrustedOption' => $context->useTrustedOption()
+            'useTrustedOption' => $context->useTrustedOption(),
         ));
     }
-
 }

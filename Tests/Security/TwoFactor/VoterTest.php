@@ -1,4 +1,5 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderCollection;
@@ -14,24 +15,23 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderCollection
-     **/
+     */
     protected $providerCollection;
 
     /**
-        * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Voter
-     **/
+     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Voter
+     */
     protected $voter;
 
     public function setUp()
     {
         $this->provider = $this->getMock("Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface");
-
     }
 
     private function getProviderCollection($providers = true)
     {
         $providerCollection = new TwoFactorProviderCollection();
-        if(true === $providers) {
+        if (true === $providers) {
             $providerCollection->addProvider('test', $this->provider);
         }
 
@@ -63,7 +63,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function vote_notAuthenticated_withProviders()
     {
         $token = $this->getToken();
@@ -73,7 +73,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
         $sessionFlagManager
             ->expects($this->once())
-            ->method("isNotAuthenticated")
+            ->method('isNotAuthenticated')
             ->with('test', $token)
             ->will($this->returnValue(true));
 
@@ -84,7 +84,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function vote_notAuthenticated_noProviders()
     {
         $token = $this->getToken();
@@ -94,7 +94,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
         $sessionFlagManager
             ->expects($this->never())
-            ->method("isNotAuthenticated");
+            ->method('isNotAuthenticated');
 
         $voter = $this->getVoter($providerCollection, $sessionFlagManager);
 
@@ -103,7 +103,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function vote_authenticated_withProviders()
     {
         $token = $this->getToken();
@@ -115,7 +115,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
         $sessionFlagManager
             ->expects($this->once())
-            ->method("isNotAuthenticated")
+            ->method('isNotAuthenticated')
             ->with('test', $token)
             ->will($this->returnValue(false));
 
@@ -126,7 +126,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function vote_authenticated_noProviders()
     {
         $token = $this->getToken();
@@ -138,7 +138,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
         $sessionFlagManager
             ->expects($this->never())
-            ->method("isNotAuthenticated");
+            ->method('isNotAuthenticated');
 
         $voter = $this->getVoter($providerCollection, $sessionFlagManager);
 
@@ -147,7 +147,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function voter_supportsClass()
     {
         $token = $this->getToken();
@@ -164,7 +164,7 @@ class VoterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     **/
+     */
     public function voter_supportsAttribute()
     {
         $token = $this->getToken();

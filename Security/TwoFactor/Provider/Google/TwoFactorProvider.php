@@ -1,4 +1,5 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google;
 
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
@@ -10,48 +11,56 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class TwoFactorProvider implements TwoFactorProviderInterface
 {
-
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\Validation\CodeValidatorInterface $authenticator
+     * @var CodeValidatorInterface
      */
     private $authenticator;
 
     /**
-     * @var \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface $templating
+     * @var EngineInterface
      */
     private $templating;
 
     /**
-     * @var string $formTemplate
+     * @var string
      */
     private $formTemplate;
 
     /**
-     * @var string $authCodeParameter
+     * @var string
      */
     private $authCodeParameter;
 
     /**
-     * Construct provider for Google authentication
+     * Construct provider for Google authentication.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\Validation\CodeValidatorInterface $authenticator
-     * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface                                  $templating
-     * @param string                                                                                      $formTemplate
-     * @param string                                                                                      $authCodeParameter
+     * @param CodeValidatorInterface $authenticator
+     * @param string                 $formTemplate
+     * @param string                 $authCodeParameter
      */
-    public function __construct(CodeValidatorInterface $authenticator, EngineInterface $templating, $formTemplate, $authCodeParameter)
+    public function __construct(CodeValidatorInterface $authenticator, $formTemplate, $authCodeParameter)
     {
         $this->authenticator = $authenticator;
-        $this->templating = $templating;
         $this->formTemplate = $formTemplate;
         $this->authCodeParameter = $authCodeParameter;
     }
 
     /**
-     * Begin Google authentication process
+     * Set templating engin to avoid cirular reference when injecting in the constructor.
      *
-     * @param  \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
-     * @return boolean
+     * @param EngineInterface $templating
+     */
+    public function setTemplatingEngine(EngineInterface $templating)
+    {
+        $this->templating = $templating;
+    }
+
+    /**
+     * Begin Google authentication process.
+     *
+     * @param AuthenticationContext $context
+     *
+     * @return bool
      */
     public function beginAuthentication(AuthenticationContext $context)
     {
@@ -62,9 +71,10 @@ class TwoFactorProvider implements TwoFactorProviderInterface
     }
 
     /**
-     * Ask for Google authentication code
+     * Ask for Google authentication code.
      *
-     * @param  \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext $context
+     * @param AuthenticationContext $context
+     *
      * @return \Symfony\Component\HttpFoundation\Response|null
      */
     public function requestAuthenticationCode(AuthenticationContext $context)
@@ -80,14 +90,14 @@ class TwoFactorProvider implements TwoFactorProviderInterface
                 $context->setAuthenticated(true);
 
                 return new RedirectResponse($request->getUri());
-            } else {
-                $session->getFlashBag()->set("two_factor", "scheb_two_factor.code_invalid");
             }
+
+            $session->getFlashBag()->set('two_factor', 'scheb_two_factor.code_invalid');
         }
 
         // Force authentication code dialog
         return $this->templating->renderResponse($this->formTemplate, array(
-            'useTrustedOption' => $context->useTrustedOption()
+            'useTrustedOption' => $context->useTrustedOption(),
         ));
     }
 }

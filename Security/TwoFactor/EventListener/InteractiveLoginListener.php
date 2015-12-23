@@ -1,28 +1,28 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\EventListener;
 
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class InteractiveLoginListener
 {
-
     /**
-     * @var \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface $authHandler
+     * @var AuthenticationHandlerInterface
      */
     private $authHandler;
 
     /**
-     * @var array $supportedTokens
+     * @var array
      */
     private $supportedTokens;
 
     /**
-     * Construct a listener for login events
+     * Construct a listener for login events.
      *
-     * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface $authHandler
-     * @param array                                                                    $supportedTokens
+     * @param AuthenticationHandlerInterface $authHandler
+     * @param array                          $supportedTokens
      */
     public function __construct(AuthenticationHandlerInterface $authHandler, array $supportedTokens)
     {
@@ -31,9 +31,9 @@ class InteractiveLoginListener
     }
 
     /**
-     * Listen for successful login events
+     * Listen for successful login events.
      *
-     * @param \Symfony\Component\Security\Http\Event\InteractiveLoginEvent $event
+     * @param InteractiveLoginEvent $event
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
@@ -52,10 +52,11 @@ class InteractiveLoginListener
     }
 
     /**
-     * Check if the token class is supported
+     * Check if the token class is supported.
      *
-     * @param  mixed   $token
-     * @return boolean
+     * @param mixed $token
+     *
+     * @return bool
      */
     private function isTokenSupported($token)
     {

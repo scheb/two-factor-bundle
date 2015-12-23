@@ -1,33 +1,33 @@
 <?php
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
-use Symfony\Component\DependencyInjection\Reference;
-
 /**
- * Class TwoFactorProviderCollection
+ * Class TwoFactorProviderCollection.
  */
 class TwoFactorProviderCollection
 {
     /**
      * @var array
-     **/
+     */
     protected $providers = array();
 
     /**
-     * addProvider
+     * addProvider.
+     *
      * @param string $name
      * @param mixed  $provider
-     * @return void
-     **/
+     */
     public function addProvider($name, $provider)
     {
         $this->providers[$name] = $provider;
     }
 
     /**
-     * getProviders
+     * getProviders.
+     *
      * @return array
-     **/
+     */
     public function getProviders()
     {
         return $this->providers;
