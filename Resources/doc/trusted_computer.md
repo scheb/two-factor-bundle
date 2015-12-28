@@ -21,6 +21,7 @@ namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\TrustedComputerInterface;
+use Symfony\Component\HttpFoundation\HeaderBag;
 
 class User implements TrustedComputerInterface
 {
@@ -32,7 +33,7 @@ class User implements TrustedComputerInterface
 
     // [...]
 
-    public function addTrustedComputer($token, \DateTime $validUntil)
+    public function addTrustedComputer($token, \DateTime $validUntil, HeaderBag $headers)
     {
         $this->trusted[$token] = $validUntil->format("r");
     }

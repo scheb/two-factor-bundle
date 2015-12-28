@@ -10,7 +10,7 @@ interface TrustedComputerInterface
      * @param string    $token
      * @param \DateTime $validUntil
      */
-    public function addTrustedComputer($token, \DateTime $validUntil);
+    public function addTrustedComputer($token, \DateTime $validUntil, \Symfony\Component\HttpFoundation\HeaderBag $headers);
 
     /**
      * Validate a trusted computer token
