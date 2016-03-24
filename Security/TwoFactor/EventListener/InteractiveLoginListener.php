@@ -19,15 +19,22 @@ class InteractiveLoginListener
     private $supportedTokens;
 
     /**
+     * @var string $excludePattern
+     */
+    private $excludePattern;
+
+    /**
      * Construct a listener for login events
      *
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface $authHandler
      * @param array                                                                    $supportedTokens
+     * @param string                                                                   $excludePattern
      */
-    public function __construct(AuthenticationHandlerInterface $authHandler, array $supportedTokens)
+    public function __construct(AuthenticationHandlerInterface $authHandler, array $supportedTokens, $excludePattern = null)
     {
         $this->authHandler = $authHandler;
         $this->supportedTokens = $supportedTokens;
+        $this->excludePattern = $excludePattern;
     }
 
     /**
@@ -38,6 +45,11 @@ class InteractiveLoginListener
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $request = $event->getRequest();
+
+        // Exclude path
+        if ($this->excludePattern !== null && preg_match("#".$this->excludePattern."#", $request->getPathInfo())) {
+            return;
+        }
 
         // Check if security token is supported
         $token = $event->getAuthenticationToken();
