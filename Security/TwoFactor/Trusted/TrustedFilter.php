@@ -96,7 +96,7 @@ class TrustedFilter implements AuthenticationHandlerInterface
             return $response;
         }
 
-        return null;
+        return;
     }
 
     /**
