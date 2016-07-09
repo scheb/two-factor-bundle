@@ -4,5 +4,6 @@
 .buildpath
 # PhpStorm
 .idea/
+bin
 vendor/
 composer.lock
