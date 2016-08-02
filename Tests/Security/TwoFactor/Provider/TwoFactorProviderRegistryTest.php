@@ -23,11 +23,20 @@ class TwoFactorProviderRegistryTest extends TestCase
      */
     private $registry;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventDispatcher;
+
     public function setUp()
     {
+        $this->eventDispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcher')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->flagManager = $this->createMock('Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagManager');
         $this->provider = $this->createMock('Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface');
         $this->registry = new TwoFactorProviderRegistry($this->flagManager, array('test' => $this->provider));
+        $this->registry->setEventDispatcher($this->eventDispatcher);
     }
 
     private function getToken()

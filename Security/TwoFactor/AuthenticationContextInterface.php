@@ -63,4 +63,11 @@ interface AuthenticationContextInterface
      * @param bool $authenticated
      */
     public function setAuthenticated($authenticated);
+
+    /**
+     * Is authentication request.
+     *
+     * @return bool
+     */
+    public function isAuthenticationTry();
 }
