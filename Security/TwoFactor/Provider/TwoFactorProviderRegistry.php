@@ -34,6 +34,13 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
     protected $eventDispatcher;
 
     /**
+     * Request parameter name used for code.
+     *
+     * @var string
+     */
+    protected $authRequestParameter = '_auth_code';
+
+    /**
      * Initialize with an array of registered two-factor providers.
      *
      * @param SessionFlagManager $flagManager
@@ -86,7 +93,7 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
                     }
                     $this->flagManager->setComplete($providerName, $token);
                 } else {
-                    if (null !== $this->eventDispatcher && $context->isAuthenticationTry()) {
+                    if (null !== $this->eventDispatcher && $context->getRequest()->request->has($this->authRequestParameter)) {
                         $this->eventDispatcher->dispatch(TwoFactorAuthFailureEvent::NAME, new TwoFactorAuthFailureEvent());
                     }
                 }
@@ -106,11 +113,25 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
      *
      * @param EventDispatcherInterface $eventDispatcher
      *
-     * @return TwoFactorProviderRegistry
+     * @return static
      */
     public function setEventDispatcher($eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
+
+        return $this;
+    }
+
+    /**
+     * Set authentication code parameter name in request.
+     *
+     * @param string $authRequestParameter The parameter name.
+     *
+     * @return static
+     */
+    public function setAuthenticationRequestParameter($authRequestParameter)
+    {
+        $this->authRequestParameter = $authRequestParameter;
 
         return $this;
     }

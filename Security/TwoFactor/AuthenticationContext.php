@@ -108,12 +108,4 @@ class AuthenticationContext implements AuthenticationContextInterface
     {
         $this->authenticated = $authenticated;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isAuthenticationTry()
-    {
-        return $this->request->request->has('_auth_code');
-    }
 }
