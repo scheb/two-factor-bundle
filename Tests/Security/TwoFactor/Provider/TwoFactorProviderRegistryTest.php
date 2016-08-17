@@ -23,11 +23,17 @@ class TwoFactorProviderRegistryTest extends TestCase
      */
     private $registry;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventDispatcher;
+
     public function setUp()
     {
+        $this->eventDispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcher');
         $this->flagManager = $this->createMock('Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagManager');
         $this->provider = $this->createMock('Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface');
-        $this->registry = new TwoFactorProviderRegistry($this->flagManager, array('test' => $this->provider));
+        $this->registry = new TwoFactorProviderRegistry($this->flagManager, array('test' => $this->provider), $this->eventDispatcher);
     }
 
     private function getToken()
@@ -49,6 +55,20 @@ class TwoFactorProviderRegistryTest extends TestCase
             ->expects($this->any())
             ->method('isAuthenticated')
             ->will($this->returnValue($authenticated));
+
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
+        $request->request = $this->createMock('Symfony\Component\HttpFoundation\ParameterBag');
+        $request->request
+            ->expects($this->any())
+            ->method('get')
+            ->with('_auth_code')
+            ->will($this->returnValue('123456'));
+
+        $context
+            ->expects($this->any())
+            ->method('getRequest')
+            ->will($this->returnValue($request));
+
 
         return $context;
     }

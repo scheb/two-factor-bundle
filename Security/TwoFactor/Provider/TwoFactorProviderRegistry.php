@@ -6,6 +6,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationHandlerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Session\SessionFlagManager;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthEvent;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthFailureEvent;
 
 class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
 {
@@ -24,15 +27,33 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
     private $providers;
 
     /**
+     * Event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
+     * Request parameter name used for code.
+     *
+     * @var string
+     */
+    protected $authRequestParameter;
+
+    /**
      * Initialize with an array of registered two-factor providers.
      *
-     * @param SessionFlagManager $flagManager
-     * @param array              $providers
+     * @param SessionFlagManager       $flagManager
+     * @param array                    $providers
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param string                   $authRequestParameter
      */
-    public function __construct(SessionFlagManager $flagManager, $providers = array())
+    public function __construct(SessionFlagManager $flagManager, $providers = [], EventDispatcherInterface $eventDispatcher = null, $authRequestParameter = '_auth_code')
     {
         $this->flagManager = $flagManager;
-        $this->providers = $providers;
+        $this->providers   = $providers;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->authRequestParameter = $authRequestParameter;
     }
 
     /**
@@ -70,7 +91,14 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
 
                 // Set authentication completed
                 if ($context->isAuthenticated()) {
+                    if (null !== $this->eventDispatcher) {
+                        $this->eventDispatcher->dispatch(TwoFactorAuthEvent::NAME, new TwoFactorAuthEvent());
+                    }
                     $this->flagManager->setComplete($providerName, $token);
+                } else {
+                    if (null !== $this->eventDispatcher && $context->getRequest()->request->has($this->authRequestParameter)) {
+                        $this->eventDispatcher->dispatch(TwoFactorAuthFailureEvent::NAME, new TwoFactorAuthFailureEvent());
+                    }
                 }
 
                 // Return response
