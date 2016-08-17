@@ -57,6 +57,20 @@ class TwoFactorProviderRegistryTest extends TestCase
             ->method('isAuthenticated')
             ->will($this->returnValue($authenticated));
 
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
+        $request->request = $this->createMock('Symfony\Component\HttpFoundation\ParameterBag');
+        $request->request
+            ->expects($this->any())
+            ->method('get')
+            ->with('_auth_code')
+            ->will($this->returnValue('123456'));
+
+        $context
+            ->expects($this->any())
+            ->method('getRequest')
+            ->will($this->returnValue($request));
+
+
         return $context;
     }
 

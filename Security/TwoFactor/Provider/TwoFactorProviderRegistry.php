@@ -52,7 +52,6 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
         $this->providers = $providers;
     }
 
-
     /**
      * Iterate over two-factor providers and begin the two-factor authentication process.
      *
