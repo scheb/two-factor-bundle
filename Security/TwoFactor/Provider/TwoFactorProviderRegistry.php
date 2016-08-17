@@ -38,18 +38,22 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
      *
      * @var string
      */
-    protected $authRequestParameter = '_auth_code';
+    protected $authRequestParameter;
 
     /**
      * Initialize with an array of registered two-factor providers.
      *
-     * @param SessionFlagManager $flagManager
-     * @param array              $providers
+     * @param SessionFlagManager       $flagManager
+     * @param array                    $providers
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param string                   $authRequestParameter
      */
-    public function __construct(SessionFlagManager $flagManager, $providers = array())
+    public function __construct(SessionFlagManager $flagManager, $providers = [], EventDispatcherInterface $eventDispatcher = null, $authRequestParameter = '_auth_code')
     {
         $this->flagManager = $flagManager;
-        $this->providers = $providers;
+        $this->providers   = $providers;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->authRequestParameter = $authRequestParameter;
     }
 
     /**
@@ -106,34 +110,4 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
 
         return null;
     }
-
-    /**
-     * Set event dispatcher.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return static
-     */
-    public function setEventDispatcher($eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
-
-        return $this;
-    }
-
-    /**
-     * Set authentication code parameter name in request.
-     *
-     * @param string $authRequestParameter The parameter name.
-     *
-     * @return static
-     */
-    public function setAuthenticationRequestParameter($authRequestParameter)
-    {
-        $this->authRequestParameter = $authRequestParameter;
-
-        return $this;
-    }
-
-
 }
