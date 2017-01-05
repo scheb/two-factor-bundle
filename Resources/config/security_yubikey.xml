@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+	<parameters>
+		<parameter key="scheb_two_factor.security.yubikey.provider.class">Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Yubikey\TwoFactorProvider</parameter>
+		<parameter key="scheb_two_factor.security.yubikey.register.class">Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Yubikey\YubikeyRegisterService</parameter>
+	</parameters>
+	<services>
+		<service id="scheb_two_factor.security.yubikey.provider.class" class="%scheb_two_factor.security.yubikey.provider.class%">
+			<tag name="scheb_two_factor.provider" alias="yubikey" />
+			<argument type="service" id="scheb_two_factor.backup_code_validator" />
+			<argument type="service" id="surfnet_yubikey_api_client.verification_service" />
+			<argument type="service" id="templating" />
+			<argument>%scheb_two_factor.yubikey.template%</argument>
+		</service>
+		<service id="scheb_two_factor.security.yubikey.register" class="%scheb_two_factor.security.yubikey.register.class%">
+			<argument type="service" id="surfnet_yubikey_api_client.verification_service" />
+		</service>
+	</services>
+</container>
