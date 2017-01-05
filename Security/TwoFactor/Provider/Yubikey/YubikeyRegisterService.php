@@ -1,15 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: galphanet
- * Date: 05.01.17
- * Time: 17:09
- */
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Yubikey;
 
 use Surfnet\YubikeyApiClientBundle\Service\VerificationService;
 
+/**
+ * Class YubikeyRegisterService
+ * @author Philippe Bonvin
+ */
 class YubikeyRegisterService
 {
 

@@ -12,6 +12,10 @@ use Surfnet\YubikeyApiClientBundle\Service\VerificationService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class TwoFactorProvider
+ * @author Philippe Bonvin
+ */
 class TwoFactorProvider implements TwoFactorProviderInterface
 {
 
