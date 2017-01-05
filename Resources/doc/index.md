@@ -22,6 +22,7 @@ The bundle supports the following authentication methods out of the box:
 
   - [Google Authenticator](google.md)
   - [Authentication code sent via email](email.md)
+  - [Yubikey](yubikey.md)
 
 ## Custom authentication methods ##
 
