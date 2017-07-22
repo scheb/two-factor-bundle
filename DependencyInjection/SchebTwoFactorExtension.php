@@ -47,7 +47,7 @@ class SchebTwoFactorExtension extends Extension
 
         $dispatcher = $container->findDefinition('event_dispatcher');
         if ($dispatcher || !$dispatcher->isDeprecated()) {
-            $registry = $container->findDefinition('scheb_two_factor.provider_registry');
+            $registry = $container->getDefinition('scheb_two_factor.provider_registry');
             $registry->replaceArgument(2, new Reference('event_dispatcher'));
         }
 
