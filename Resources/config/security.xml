@@ -39,7 +39,7 @@
 			<argument>%scheb_two_factor.trusted_computer.enabled%</argument>
 			<argument>%scheb_two_factor.parameter_names.trusted%</argument>
 		</service>
-		<service id="scheb_two_factor.event_dispatcher" class="Symfony\Component\EventDispatcher\EventDispatcher">
+		<service id="scheb_two_factor.event_dispatcher" class="Symfony\Component\EventDispatcher\EventDispatcher" public="false">
 		</service>
 		<service id="scheb_two_factor.provider_registry" class="%scheb_two_factor.provider_registry.class%" lazy="true">
 			<argument type="service" id="scheb_two_factor.session_flag_manager" />
