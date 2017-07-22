@@ -82,7 +82,7 @@ class TwoFactorProviderRegistry implements AuthenticationHandlerInterface
     public function requestAuthenticationCode(AuthenticationContextInterface $context)
     {
         $token = $context->getToken();
-first change
+
         // Iterate over two-factor providers and ask for completion
         /** @var TwoFactorProviderInterface $provider */
         foreach ($this->providers as $providerName => $provider) {
