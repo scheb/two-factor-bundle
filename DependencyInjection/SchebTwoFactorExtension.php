@@ -44,6 +44,13 @@ class SchebTwoFactorExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('security.xml');
+
+//        $dispatcher = $container->findDefinition('event_dispatcher');
+//        if ($dispatcher || !$dispatcher->isDeprecated()) {
+//            $registry = $container->getDefinition('scheb_two_factor.provider_registry');
+//            $registry->replaceArgument(2, new Reference('event_dispatcher'));
+//        }
+
         $loader->load('listeners.xml');
         $loader->load('persistence.xml');
 
