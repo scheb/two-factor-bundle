@@ -18,6 +18,7 @@ class SchebTwoFactorBundleTest extends TestCase
         $bundle = new SchebTwoFactorBundle();
         $bundle->build($containerBuilder);
 
+        var_dump($containerBuilder->getCompilerPassConfig()->getPasses());
         $this->assertCount(1, $containerBuilder->passes);
         $this->assertInstanceOf('Scheb\TwoFactorBundle\DependencyInjection\Compiler\ProviderCompilerPass', $containerBuilder->passes[0]);
     }
