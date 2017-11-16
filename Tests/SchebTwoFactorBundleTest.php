@@ -27,7 +27,7 @@ class ContainerBuilderMock extends ContainerBuilder
 {
     public $passes = array();
 
-    public function addCompilerPass(CompilerPassInterface $pass, $type = PassConfig::TYPE_BEFORE_OPTIMIZATION, $priority = 0)
+    public function addCompilerPass(CompilerPassInterface $pass, $type = PassConfig::TYPE_BEFORE_OPTIMIZATION, int $priority = 0)
     {
         $this->passes[] = $pass;
 
