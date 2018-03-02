@@ -23,7 +23,7 @@ class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
         // Check if user can do email authentication
         $user = $context->getUser();
 
-        return $user instanceof TwoFactorInterface && $user->getGoogleAuthenticatorSecret();
+        return $user instanceof TwoFactorInterface && $user->isGoogleAuthenticatorEnabled();
     }
 
     public function validateAuthenticationCode($user, string $authenticationCode): bool
