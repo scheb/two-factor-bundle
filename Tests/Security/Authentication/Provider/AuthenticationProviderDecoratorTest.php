@@ -71,7 +71,7 @@ class AuthenticationProviderDecoratorTest extends TestCase
         );
     }
 
-    private function stubDecoratedProviderReturnsToken(MockObject $token = null): void
+    private function stubDecoratedProviderReturnsToken(?MockObject $token): void
     {
         $this->decoratedAuthenticationProvider
             ->expects($this->any())
