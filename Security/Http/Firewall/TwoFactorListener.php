@@ -137,8 +137,11 @@ class TwoFactorListener implements ListenerInterface
 
         $request = $event->getRequest();
         if ($this->isCheckAuthCodeRequest($request)) {
-            $response = $this->attemptAuthentication($request, $currentToken);
-            $event->setResponse($response);
+            // Only attempt authentication on post requests (see https://github.com/symfony/symfony-docs/issues/6126)
+            if (Request::METHOD_POST === $request->getMethod()) {
+                $response = $this->attemptAuthentication($request, $currentToken);
+                $event->setResponse($response);
+            }
 
             return;
         }
