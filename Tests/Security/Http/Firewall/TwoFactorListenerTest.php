@@ -127,6 +127,10 @@ class TwoFactorListenerTest extends TestCase
             ->willReturnCallback(function (string $param) {
                 return $this->requestParams[$param];
             });
+        $this->request
+            ->expects($this->any())
+            ->method('getMethod')
+            ->willReturn(Request::METHOD_POST);
 
         $this->getResponseEvent = $this->createMock(GetResponseEvent::class);
         $this->getResponseEvent
