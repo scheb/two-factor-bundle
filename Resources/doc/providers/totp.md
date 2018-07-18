@@ -3,7 +3,8 @@ TOTP Authentication
 
 ## How it works
 
-This rovider is similar and compatible with [Google Authenticator](google.md). The configuration process is identical: a secret code and parameters are associated to the user.
+This authenticator is similar and compatible with [Google Authenticator](google.md).
+The configuration process is identical: a secret code and parameters are associated to the user.
 Users can add that code to the application on their mobile.
 The app will generate a numeric code from it that changes after a period of time.
 
