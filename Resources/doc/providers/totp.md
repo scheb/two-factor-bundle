@@ -118,9 +118,9 @@ $provisioningUri = $totp->getProvisioningUri()
 With Symfony 4 you use the dependency injection to get the services:
 
 ```php
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
 
-public function index(GoogleAuthenticatorInterface $twoFactor)
+public function index(TotpAuthenticatorInterface $twoFactor)
 {
     // ...
     $totp = $twoFactor->generateNewTotp();
@@ -156,9 +156,9 @@ echo '<img src="'.$url.'" />';
 You can then encode Provisioning Uri in a QR code the way you like (e.g. by using one of the many js-libraries).
  
 ```php
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
 
-public function index(GoogleAuthenticatorInterface $twoFactor)
+public function index(TotpAuthenticatorInterface $twoFactor)
 {
     // ...
     $totp = $twoFactor->getTotpForUser($user);
