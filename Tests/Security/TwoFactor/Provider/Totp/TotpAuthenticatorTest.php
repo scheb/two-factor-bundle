@@ -4,18 +4,26 @@ namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Totp;
 
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TotpAuthenticatorTest extends TestCase
 {
-    private function createAuthenticator(?string $issuer = null, int $period = 30, int $digits = 6, string $digest = 'sha1', array $customParameters = []): TotpAuthenticator
+    private function createFactory(?string $issuer = null, int $period = 30, int $digits = 6, string $digest = 'sha1', array $customParameters = []): TotpFactory
     {
-        return new TotpAuthenticator(
+        return new TotpFactory(
             $issuer,
             $period,
             $digits,
             $digest,
-            $customParameters,
+            $customParameters
+        );
+    }
+
+    private function createAuthenticator(TotpFactory $totpFactory): TotpAuthenticator
+    {
+        return new TotpAuthenticator(
+            $totpFactory,
             'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl={PROVISIONING_URI}',
             '{PROVISIONING_URI}'
         );
@@ -34,8 +42,10 @@ class TotpAuthenticatorTest extends TestCase
             ->method('getTotpAuthenticationProvisioningUri')
             ->willReturn($provisioningUri);
 
-        $authenticator = $this->createAuthenticator($issuer);
-        $totp = $authenticator->getTotpForUser($user);
+        $factory = $this->createFactory($issuer);
+        $totp = $factory->getTotpForUser($user);
+
+        $authenticator = $this->createAuthenticator($factory);
         $returnValue = $authenticator->getUrl($totp);
         $this->assertEquals($expectedUrl, $returnValue);
 

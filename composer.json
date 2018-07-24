@@ -22,7 +22,8 @@
         "symfony/security-bundle": "^3.4|^4.0",
         "symfony/twig-bundle": "^3.4|^4.0",
         "lcobucci/jwt": "^3.2",
-        "spomky-labs/otphp": "^9.1"
+        "spomky-labs/otphp": "^9.1",
+        "paragonie/constant_time_encoding": "^2.2"
     },
     "require-dev": {
         "doctrine/lexer": "^1.0.1",

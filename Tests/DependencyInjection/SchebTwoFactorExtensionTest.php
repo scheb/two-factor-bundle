@@ -138,16 +138,15 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_totpAuthEnabled_loadTotpServices()
+    public function load_totpAuthEnabled_loadTotpFactoryServices()
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertHasDefinition('scheb_two_factor.security.totp_authenticator');
-        $this->assertHasDefinition('scheb_two_factor.security.totp.provider');
+        $this->assertHasDefinition('scheb_two_factor.security.totp_factory');
 
         /** @var TotpAuthenticator $service */
-        $service = $this->container->get('scheb_two_factor.security.totp_authenticator');
+        $service = $this->container->get('scheb_two_factor.security.totp_factory');
         $totp = $service->generateNewTotp();
         $totp->setLabel('Alice');
         $this->assertContains('otpauth://totp/Issuer%3AAlice?algorithm=sha256&digits=8&image=http%3A%2F%2Ffoo%2Fbar.png&issuer=Issuer&period=20&secret=', $totp->getProvisioningUri());

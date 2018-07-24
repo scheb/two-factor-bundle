@@ -25,6 +25,9 @@ class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
         $this->formRenderer = $formRenderer;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function beginAuthentication(AuthenticationContextInterface $context): bool
     {
         // Check if user can do email authentication
@@ -35,6 +38,9 @@ class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
             && $user->getGoogleAuthenticatorSecret();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function validateAuthenticationCode($user, string $authenticationCode): bool
     {
         if (!($user instanceof TwoFactorInterface)) {
@@ -44,6 +50,9 @@ class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
         return $this->authenticator->checkCode($user, $authenticationCode);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getFormRenderer(): TwoFactorFormRendererInterface
     {
         return $this->formRenderer;

@@ -9,15 +9,29 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface
 
 class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
 {
+    /**
+     * @var TotpAuthenticatorInterface
+     */
     private $authenticator;
+
+    /**
+     * @var TwoFactorFormRendererInterface
+     */
     private $formRenderer;
 
+    /**
+     * @param TotpAuthenticatorInterface     $authenticator
+     * @param TwoFactorFormRendererInterface $formRenderer
+     */
     public function __construct(TotpAuthenticatorInterface $authenticator, TwoFactorFormRendererInterface $formRenderer)
     {
         $this->authenticator = $authenticator;
         $this->formRenderer = $formRenderer;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function beginAuthentication(AuthenticationContextInterface $context): bool
     {
         $user = $context->getUser();
@@ -27,6 +41,9 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
             && $user->getTotpAuthenticationProvisioningUri();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function validateAuthenticationCode($user, string $authenticationCode): bool
     {
         if (!($user instanceof TwoFactorInterface)) {
@@ -36,6 +53,9 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
         return $this->authenticator->checkCode($user, $authenticationCode);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getFormRenderer(): TwoFactorFormRendererInterface
     {
         return $this->formRenderer;
