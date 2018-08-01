@@ -57,6 +57,12 @@ scheb_two_factor:
     ip_whitelist:
         - 127.0.0.1
         - 192.168.0.0/16
+
+    # CSRF protection feature. These are the default values.
+    csrf_protection:
+        enabled: false
+        field_name: '_token'
+        token_id: 'two_factor_csrf_token'
 ```
 
 ```yaml

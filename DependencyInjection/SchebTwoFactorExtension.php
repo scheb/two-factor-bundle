@@ -33,6 +33,9 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.trusted_device.cookie_same_site', $config['trusted_device']['cookie_same_site']);
         $container->setParameter('scheb_two_factor.security_tokens', $config['security_tokens']);
         $container->setParameter('scheb_two_factor.ip_whitelist', $config['ip_whitelist']);
+        $container->setParameter('scheb_two_factor.csrf_protection.enabled', $config['csrf_protection']['enabled']);
+        $container->setParameter('scheb_two_factor.csrf_protection.field_name', $config['csrf_protection']['field_name']);
+        $container->setParameter('scheb_two_factor.csrf_protection.token_id', $config['csrf_protection']['token_id']);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('security.xml');
@@ -40,6 +43,7 @@ class SchebTwoFactorExtension extends Extension
         $loader->load('trusted_device.xml');
         $loader->load('backup_codes.xml');
         $loader->load('two_factor.xml');
+        $loader->load('csrf_protection.xml');
 
         // Load two-factor modules
         if (true === $config['email']['enabled']) {

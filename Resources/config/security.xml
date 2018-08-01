@@ -38,6 +38,8 @@
 			<argument type="service" id="security.access_map" />
 			<argument type="service" id="security.access.decision_manager" />
 			<argument type="service" id="event_dispatcher" on-invalid="null"/>
+			<argument type="service" id="scheb_two_factor.csrf_protection_configuration" />
+			<argument type="service" id="scheb_two_factor.csrf_token_validator" />
 			<argument type="service" id="logger" on-invalid="null" />
 		</service>
 

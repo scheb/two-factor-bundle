@@ -8,6 +8,8 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\Authentication\Voter\TwoFactorInProgressVoter;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener;
+use Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfProtectionConfiguration;
+use Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfTokenValidator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
@@ -22,6 +24,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
@@ -76,6 +79,16 @@ class TwoFactorListenerTest extends TestCase
     private $dispatcher;
 
     /**
+     * @var MockObject|CsrfProtectionConfiguration
+     */
+    private $csrfProtectionConfiguration;
+
+    /**
+     * @var MockObject|CsrfTokenValidator
+     */
+    private $csrfTokenValidator;
+
+    /**
      * @var MockObject|AccessMapInterface
      */
     private $accessMap;
@@ -125,6 +138,8 @@ class TwoFactorListenerTest extends TestCase
         $this->accessMap = $this->createMock(AccessMapInterface::class);
         $this->accessDecisionManager = $this->createMock(AccessDecisionManagerInterface::class);
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->csrfProtectionConfiguration = $this->createMock(CsrfProtectionConfiguration::class);
+        $this->csrfTokenValidator = $this->createMock(CsrfTokenValidator::class);
 
         $this->request = $this->createMock(Request::class);
         $this->request
@@ -162,6 +177,8 @@ class TwoFactorListenerTest extends TestCase
             $this->accessMap,
             $this->accessDecisionManager,
             $this->dispatcher,
+            $this->csrfProtectionConfiguration,
+            $this->csrfTokenValidator,
             $this->createMock(LoggerInterface::class)
         );
     }
@@ -234,6 +251,14 @@ class TwoFactorListenerTest extends TestCase
             ->willThrowException(new AuthenticationException());
     }
 
+    private function stubAuthenticationManagerThrowsInvalidCsrfTokenException(): void
+    {
+        $this->csrfTokenValidator
+            ->expects($this->any())
+            ->method('validate')
+            ->willThrowException(new InvalidCsrfTokenException());
+    }
+
     private function stubPathAccessGranted(bool $accessGranted): void
     {
         $this->accessMap
@@ -245,6 +270,14 @@ class TwoFactorListenerTest extends TestCase
             ->method('decide')
             ->with($this->isInstanceOf(TwoFactorToken::class), [TwoFactorInProgressVoter::IS_AUTHENTICATED_2FA_IN_PROGRESS], $this->request)
             ->willReturn($accessGranted);
+    }
+
+    private function stubCsrfProtectionIsEnabled(): void
+    {
+        $this->csrfProtectionConfiguration
+            ->expects($this->any())
+            ->method('isCsrfProtectionEnabled')
+            ->willReturn(true);
     }
 
     private function assertPathNotChecked(): void
@@ -417,6 +450,22 @@ class TwoFactorListenerTest extends TestCase
             ->expects($this->once())
             ->method('setResponse')
             ->with($this->identicalTo($response));
+
+        $this->listener->handle($this->getResponseEvent);
+    }
+
+    /**
+     * @test
+     */
+    public function handle_csrfTokenInvalid_dispatchFailureEvent()
+    {
+        $this->stubTokenManagerHasToken($this->createTwoFactorToken());
+        $this->stubCurrentPath(self::CHECK_PATH);
+        $this->stubCsrfProtectionIsEnabled();
+        $this->stubAuthenticationManagerThrowsInvalidCsrfTokenException();
+        $this->stubHandlersReturnResponse();
+
+        $this->assertEventsDispatched([TwoFactorAuthenticationEvents::FAILURE]);
 
         $this->listener->handle($this->getResponseEvent);
     }

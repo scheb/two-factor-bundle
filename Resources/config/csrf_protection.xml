@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+	<services>
+		<service id="scheb_two_factor.csrf_protection_configuration" class="Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfProtectionConfiguration">
+			<argument>%scheb_two_factor.csrf_protection.enabled%</argument>
+			<argument>%scheb_two_factor.csrf_protection.field_name%</argument>
+			<argument>%scheb_two_factor.csrf_protection.token_id%</argument>
+		</service>
+
+		<service id="scheb_two_factor.csrf_token_validator" class="Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfTokenValidator">
+			<argument type="service" id="security.csrf.token_manager" />
+			<argument type="service" id="scheb_two_factor.csrf_protection_configuration" />
+		</service>
+	</services>
+</container>

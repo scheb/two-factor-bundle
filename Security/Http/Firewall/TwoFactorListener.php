@@ -6,6 +6,8 @@ use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfProtectionConfiguration;
+use Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfTokenValidator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
@@ -94,6 +96,16 @@ class TwoFactorListener implements ListenerInterface
     private $dispatcher;
 
     /**
+     * @var CsrfProtectionConfiguration
+     */
+    private $csrfProtectionConfiguration;
+
+    /**
+     * @var CsrfTokenValidator
+     */
+    private $csrfTokenValidator;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -111,6 +123,8 @@ class TwoFactorListener implements ListenerInterface
         AccessMapInterface $accessMap,
         AccessDecisionManagerInterface $accessDecisionManager,
         EventDispatcherInterface $dispatcher,
+        CsrfProtectionConfiguration $csrfProtectionConfiguration,
+        CsrfTokenValidator $csrfTokenValidator,
         ?LoggerInterface $logger = null
     ) {
         if (empty($firewallName)) {
@@ -130,6 +144,8 @@ class TwoFactorListener implements ListenerInterface
         $this->trustedDeviceManager = $trustedDeviceManager;
         $this->accessMap = $accessMap;
         $this->accessDecisionManager = $accessDecisionManager;
+        $this->csrfProtectionConfiguration = $csrfProtectionConfiguration;
+        $this->csrfTokenValidator = $csrfTokenValidator;
     }
 
     public function handle(GetResponseEvent $event)
@@ -175,6 +191,10 @@ class TwoFactorListener implements ListenerInterface
     {
         $authCode = $request->get($this->options['auth_code_parameter_name'], '');
         try {
+            if ($this->csrfProtectionConfiguration->isCsrfProtectionEnabled()) {
+                $this->csrfTokenValidator->validate($request);
+            }
+
             $token = new TwoFactorToken($currentToken->getAuthenticatedToken(), $authCode, $this->firewallName, $currentToken->getTwoFactorProviders());
             $this->dispatchLoginEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $token);
             $resultToken = $this->authenticationManager->authenticate($token);

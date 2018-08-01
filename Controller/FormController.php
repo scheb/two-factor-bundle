@@ -3,6 +3,7 @@
 namespace Scheb\TwoFactorBundle\Controller;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfProtectionConfiguration;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext;
@@ -32,6 +33,11 @@ class FormController
     private $twoFactorFirewallContext;
 
     /**
+     * @var CsrfProtectionConfiguration
+     */
+    private $csrfProtectionConfiguration;
+
+    /**
      * @var bool
      */
     private $trustedFeatureEnabled;
@@ -40,12 +46,14 @@ class FormController
         TokenStorageInterface $tokenStorage,
         TwoFactorProviderRegistry $providerRegistry,
         TwoFactorFirewallContext $twoFactorFirewallContext,
+        CsrfProtectionConfiguration $csrfProtectionConfiguration,
         bool $trustedFeatureEnabled
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->providerRegistry = $providerRegistry;
         $this->twoFactorFirewallContext = $twoFactorFirewallContext;
         $this->trustedFeatureEnabled = $trustedFeatureEnabled;
+        $this->csrfProtectionConfiguration = $csrfProtectionConfiguration;
     }
 
     public function form(Request $request): Response
@@ -97,6 +105,7 @@ class FormController
             'displayTrustedOption' => $displayTrustedOption,
             'authCodeParameterName' => $config->getAuthCodeParameterName(),
             'trustedParameterName' => $config->getTrustedParameterName(),
+            'csrfProtectionConfiguration' => $this->csrfProtectionConfiguration
         ];
     }
 
