@@ -24,9 +24,6 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
         $this->issuer = $issuer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function checkCode(TwoFactorInterface $user, string $code): bool
     {
         $totp = $this->createTotp($user);
@@ -34,9 +31,6 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
         return $totp->verify($code);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getUrl(TwoFactorInterface $user): string
     {
         $totp = $this->createTotp($user);
@@ -44,9 +38,6 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
         return $totp->getQrCodeUri();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getQRContent(TwoFactorInterface $user): string
     {
         $totp = $this->createTotp($user);
@@ -54,9 +45,6 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
         return $totp->getProvisioningUri();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateSecret(): string
     {
         return trim(Base32::encodeUpper(random_bytes(32)), '=');

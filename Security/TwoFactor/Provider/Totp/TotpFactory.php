@@ -50,9 +50,6 @@ class TotpFactory implements TotpFactoryInterface
         $this->period = $period;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateNewTotp(): TOTP
     {
         $totp = TOTP::create(
@@ -71,9 +68,6 @@ class TotpFactory implements TotpFactoryInterface
         return $totp;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTotpForUser(TwoFactorInterface $user): TOTP
     {
         $provisioningUri = $user->getTotpAuthenticationProvisioningUri();

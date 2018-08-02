@@ -34,9 +34,6 @@ class TotpAuthenticator implements TotpAuthenticatorInterface
         $this->totpFactory = $totpFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function checkCode(TwoFactorInterface $user, string $code): bool
     {
         $totp = $this->totpFactory->getTotpForUser($user);
@@ -44,9 +41,6 @@ class TotpAuthenticator implements TotpAuthenticatorInterface
         return $totp->verify($code);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getUrl(TOTP $totp): string
     {
         return $totp->getQrCodeUri($this->qrCodeGenerator, $this->qrCodeDataPlaceholder);

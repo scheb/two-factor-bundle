@@ -29,9 +29,6 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
         $this->formRenderer = $formRenderer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function beginAuthentication(AuthenticationContextInterface $context): bool
     {
         $user = $context->getUser();
@@ -41,9 +38,6 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
             && $user->getTotpAuthenticationProvisioningUri();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function validateAuthenticationCode($user, string $authenticationCode): bool
     {
         if (!($user instanceof TwoFactorInterface)) {
@@ -53,9 +47,6 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
         return $this->authenticator->checkCode($user, $authenticationCode);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFormRenderer(): TwoFactorFormRendererInterface
     {
         return $this->formRenderer;
