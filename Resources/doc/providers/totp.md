@@ -49,11 +49,6 @@ class User implements TwoFactorInterface
         return $this->totpAuthenticatorProvisioningUri ? true : false;
     }
 
-    public function getTotpAuthenticatorUsername(): string
-    {
-        return $this->username;
-    }
-
     public function getTotpAuthenticatorProvisioningUri(): string
     {
         return $this->totpAuthenticatorProvisioningUri;
