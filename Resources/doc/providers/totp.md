@@ -75,16 +75,19 @@ scheb_two_factor:
         digits: 8
         digest: 'sha256'
         period: 20
+```
 
 You can also set additional parameters that will be added to provisioning Uris. They will be common for all users.
 Custom parameters may not be supported by the applications, but can be very intersting to customize the QR Codes.
 In the example below, we add an `image` parameter with the Uri to the service logo. Some applications such as FreeOTP
 support this parameter and will associate the QR Code with that logo.
 
+```yaml
 scheb_two_factor:
     totp:
         parameters:
             image: 'https://my-service/img/logo.png'
+```
 
 ## Custom Authentication Form Template
 
