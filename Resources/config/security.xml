@@ -33,13 +33,12 @@
 			<argument /> <!-- Success handler -->
 			<argument /> <!-- Failure handler -->
 			<argument /> <!-- Authentication required handler -->
+			<argument /> <!-- CSRF token validator -->
 			<argument type="collection" /> <!-- Options -->
 			<argument type="service" id="scheb_two_factor.trusted_device_manager" />
 			<argument type="service" id="security.access_map" />
 			<argument type="service" id="security.access.decision_manager" />
 			<argument type="service" id="event_dispatcher" on-invalid="null"/>
-			<argument type="service" id="scheb_two_factor.csrf_protection_configuration" />
-			<argument type="service" id="scheb_two_factor.csrf_token_validator" />
 			<argument type="service" id="logger" on-invalid="null" />
 		</service>
 
@@ -56,6 +55,11 @@
 
 		<service id="scheb_two_factor.security.authentication.authentication_required_handler" class="Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationRequiredHandler" abstract="true">
 			<argument type="service" id="security.http_utils" />
+			<argument type="string" /> <!-- Firewall name -->
+			<argument type="collection" /> <!-- Options -->
+		</service>
+
+		<service id="scheb_two_factor.security.authentication.csrf_token_validator" class="Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfTokenValidator" abstract="true">
 			<argument type="string" /> <!-- Firewall name -->
 			<argument type="collection" /> <!-- Options -->
 		</service>

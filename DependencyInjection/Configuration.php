@@ -70,14 +70,6 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue([])
                     ->prototype('scalar')->end()
                 ->end()
-                ->arrayNode('csrf_protection')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->booleanNode('enabled')->defaultFalse()->end()
-                        ->scalarNode('field_name')->defaultValue('_token')->end()
-                        ->scalarNode('token_id')->defaultValue('two_factor_csrf_token')->end()
-                    ->end()
-                ->end()
             ->end()
         ;
 

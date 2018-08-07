@@ -6,7 +6,6 @@ use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfProtectionConfiguration;
 use Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfTokenValidator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
@@ -20,6 +19,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
@@ -71,6 +72,11 @@ class TwoFactorListener implements ListenerInterface
     private $authenticationRequiredHandler;
 
     /**
+     * @var CsrfTokenValidator
+     */
+    private $csrfTokenValidator;
+
+    /**
      * @var string[]
      */
     private $options;
@@ -96,16 +102,6 @@ class TwoFactorListener implements ListenerInterface
     private $dispatcher;
 
     /**
-     * @var CsrfProtectionConfiguration
-     */
-    private $csrfProtectionConfiguration;
-
-    /**
-     * @var CsrfTokenValidator
-     */
-    private $csrfTokenValidator;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -118,13 +114,12 @@ class TwoFactorListener implements ListenerInterface
         AuthenticationSuccessHandlerInterface $successHandler,
         AuthenticationFailureHandlerInterface $failureHandler,
         AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
+        CsrfTokenValidator $csrfTokenValidator,
         array $options,
         TrustedDeviceManagerInterface $trustedDeviceManager,
         AccessMapInterface $accessMap,
         AccessDecisionManagerInterface $accessDecisionManager,
         EventDispatcherInterface $dispatcher,
-        CsrfProtectionConfiguration $csrfProtectionConfiguration,
-        CsrfTokenValidator $csrfTokenValidator,
         ?LoggerInterface $logger = null
     ) {
         if (empty($firewallName)) {
@@ -138,14 +133,13 @@ class TwoFactorListener implements ListenerInterface
         $this->successHandler = $successHandler;
         $this->failureHandler = $failureHandler;
         $this->authenticationRequiredHandler = $authenticationRequiredHandler;
+        $this->csrfTokenValidator = $csrfTokenValidator;
         $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
         $this->dispatcher = $dispatcher;
         $this->logger = $logger;
         $this->trustedDeviceManager = $trustedDeviceManager;
         $this->accessMap = $accessMap;
         $this->accessDecisionManager = $accessDecisionManager;
-        $this->csrfProtectionConfiguration = $csrfProtectionConfiguration;
-        $this->csrfTokenValidator = $csrfTokenValidator;
     }
 
     public function handle(GetResponseEvent $event)
@@ -191,8 +185,9 @@ class TwoFactorListener implements ListenerInterface
     {
         $authCode = $request->get($this->options['auth_code_parameter_name'], '');
         try {
-            if ($this->csrfProtectionConfiguration->isCsrfProtectionEnabled()) {
-                $this->csrfTokenValidator->validate($request);
+            if ($this->options['csrf_token_generator'] instanceof CsrfTokenManagerInterface
+                && !$this->csrfTokenValidator->hasValidCsrfToken($request)) {
+                throw new InvalidCsrfTokenException('Invalid CSRF token.');
             }
 
             $token = new TwoFactorToken($currentToken->getAuthenticatedToken(), $authCode, $this->firewallName, $currentToken->getTwoFactorProviders());

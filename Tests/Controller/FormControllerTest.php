@@ -6,7 +6,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Controller\FormController;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
-use Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfProtectionConfiguration;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
@@ -19,6 +18,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class FormControllerTest extends TestCase
 {
@@ -26,6 +26,8 @@ class FormControllerTest extends TestCase
     private const AUTH_CODE_PARAM_NAME = 'auth_code_param_name';
     private const TRUSTED_PARAM_NAME = 'trusted_param_name';
     private const FIREWALL_NAME = 'firewallName';
+    private const CSRF_PARAMETER_NAME = 'csrf_parameter_name';
+    private const CSRF_TOKEN_ID = 'csrf_token_id';
 
     /**
      * @var MockObject|TokenStorageInterface
@@ -72,11 +74,6 @@ class FormControllerTest extends TestCase
      */
     private $twoFactorFirewallContext;
 
-    /**
-     * @var MockObject|CsrfProtectionConfiguration
-     */
-    private $csrfProtectionConfiguration;
-
     protected function setUp()
     {
         $this->session = $this->createMock(SessionInterface::class);
@@ -111,6 +108,14 @@ class FormControllerTest extends TestCase
             ->expects($this->any())
             ->method('getTrustedParameterName')
             ->willReturn(self::TRUSTED_PARAM_NAME);
+        $this->firewallConfig
+            ->expects($this->any())
+            ->method('getCsrfParameterName')
+            ->willReturn(self::CSRF_PARAMETER_NAME);
+        $this->firewallConfig
+            ->expects($this->any())
+            ->method('getCsrfTokenId')
+            ->willReturn(self::CSRF_TOKEN_ID);
 
         $this->twoFactorFirewallContext = $this->createMock(TwoFactorFirewallContext::class);
         $this->twoFactorFirewallContext
@@ -119,14 +124,12 @@ class FormControllerTest extends TestCase
             ->with(self::FIREWALL_NAME)
             ->willReturn($this->firewallConfig);
 
-        $this->csrfProtectionConfiguration = $this->createMock(CsrfProtectionConfiguration::class);
-
         $this->initControllerWithTrustedFeature(true);
     }
 
     private function initControllerWithTrustedFeature(bool $trustedFeature): void
     {
-        $this->controller = new FormController($this->tokenStorage, $this->providerRegistry, $this->twoFactorFirewallContext, $this->csrfProtectionConfiguration, $trustedFeature);
+        $this->controller = new FormController($this->tokenStorage, $this->providerRegistry, $this->twoFactorFirewallContext, $trustedFeature);
     }
 
     private function stubFirewallIsMultiFactor(bool $isMultiFactor): void
@@ -183,6 +186,14 @@ class FormControllerTest extends TestCase
             ->method('get')
             ->with(Security::AUTHENTICATION_ERROR)
             ->willReturn($exception);
+    }
+
+    private function stubFirewallIsCsrfProtected()
+    {
+        $this->firewallConfig
+            ->expects($this->any())
+            ->method('getCsrfTokenGenerator')
+            ->willReturn($this->createMock(CsrfTokenManagerInterface::class));
     }
 
     private function assertTemplateVars(callable $callback): void
@@ -360,6 +371,24 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
+    public function form_csrfTokenGeneratorInstanceOfCsrfTokenManagerInterface_isCsrfProtectionEnabledTrue()
+    {
+        $this->stubTokenStorageHasTwoFactorToken();
+        $this->stubFirewallIsCsrfProtected();
+
+        $this->assertTemplateVars(function (array $templateVars) {
+            $this->assertArrayHasKey('isCsrfProtectionEnabled', $templateVars);
+            $this->assertTrue($templateVars['isCsrfProtectionEnabled']);
+
+            return true;
+        });
+
+        $this->controller->form($this->request);
+    }
+
+    /**
+     * @test
+     */
     public function form_renderForm_renderTemplateWithTemplateVars()
     {
         $this->stubTokenStorageHasTwoFactorToken();
@@ -372,13 +401,17 @@ class FormControllerTest extends TestCase
             $this->assertArrayHasKey('displayTrustedOption', $templateVars);
             $this->assertArrayHasKey('authCodeParameterName', $templateVars);
             $this->assertArrayHasKey('trustedParameterName', $templateVars);
-            $this->assertArrayHasKey('csrfProtectionConfiguration', $templateVars);
+            $this->assertArrayHasKey('isCsrfProtectionEnabled', $templateVars);
+            $this->assertArrayHasKey('csrfParameterName', $templateVars);
+            $this->assertArrayHasKey('csrfTokenId', $templateVars);
 
             $this->assertEquals(self::CURRENT_TWO_FACTOR_PROVIDER, $templateVars['twoFactorProvider']);
             $this->assertEquals(['provider1', 'provider2'], $templateVars['availableTwoFactorProviders']);
             $this->assertEquals(self::AUTH_CODE_PARAM_NAME, $templateVars['authCodeParameterName']);
             $this->assertEquals(self::TRUSTED_PARAM_NAME, $templateVars['trustedParameterName']);
-            $this->assertEquals($this->csrfProtectionConfiguration, $templateVars['csrfProtectionConfiguration']);
+            $this->assertFalse($templateVars['isCsrfProtectionEnabled']);
+            $this->assertEquals(self::CSRF_PARAMETER_NAME, $templateVars['csrfParameterName']);
+            $this->assertEquals(self::CSRF_TOKEN_ID, $templateVars['csrfTokenId']);
 
             return true;
         });

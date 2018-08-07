@@ -54,9 +54,6 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter('lax', 'scheb_two_factor.trusted_device.cookie_same_site');
         $this->assertParameter(['Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken'], 'scheb_two_factor.security_tokens');
         $this->assertParameter([], 'scheb_two_factor.ip_whitelist');
-        $this->assertParameter(false, 'scheb_two_factor.csrf_protection.enabled');
-        $this->assertParameter('_token', 'scheb_two_factor.csrf_protection.field_name');
-        $this->assertParameter('two_factor_csrf_token', 'scheb_two_factor.csrf_protection.token_id');
     }
 
     /**
@@ -83,9 +80,6 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter('strict', 'scheb_two_factor.trusted_device.cookie_same_site');
         $this->assertParameter(['Symfony\Component\Security\Core\Authentication\Token\SomeToken'], 'scheb_two_factor.security_tokens');
         $this->assertParameter(['127.0.0.1'], 'scheb_two_factor.ip_whitelist');
-        $this->assertParameter(true, 'scheb_two_factor.csrf_protection.enabled');
-        $this->assertParameter('custom_token_field', 'scheb_two_factor.csrf_protection.field_name');
-        $this->assertParameter('custom_token_id', 'scheb_two_factor.csrf_protection.token_id');
     }
 
     /**
@@ -314,10 +308,6 @@ google:
     issuer: Issuer
     server_name: Server Name
     template: AcmeTestBundle:Authentication:googleForm.html.twig
-csrf_protection:
-    enabled: true
-    field_name: 'custom_token_field'
-    token_id: 'custom_token_id'
 EOF;
         $parser = new Parser();
 
