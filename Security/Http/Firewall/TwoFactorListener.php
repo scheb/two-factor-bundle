@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfTokenValidator;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
@@ -20,7 +20,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
@@ -185,8 +184,7 @@ class TwoFactorListener implements ListenerInterface
     {
         $authCode = $request->get($this->options['auth_code_parameter_name'], '');
         try {
-            if ($this->options['csrf_token_generator'] instanceof CsrfTokenManagerInterface
-                && !$this->csrfTokenValidator->hasValidCsrfToken($request)) {
+            if (!$this->csrfTokenValidator->hasValidCsrfToken($request)) {
                 throw new InvalidCsrfTokenException('Invalid CSRF token.');
             }
 

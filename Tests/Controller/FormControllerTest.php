@@ -18,7 +18,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class FormControllerTest extends TestCase
 {
@@ -192,8 +191,8 @@ class FormControllerTest extends TestCase
     {
         $this->firewallConfig
             ->expects($this->any())
-            ->method('getCsrfTokenGenerator')
-            ->willReturn($this->createMock(CsrfTokenManagerInterface::class));
+            ->method('isCsrfProtectionEnabled')
+            ->willReturn(true);
     }
 
     private function assertTemplateVars(callable $callback): void

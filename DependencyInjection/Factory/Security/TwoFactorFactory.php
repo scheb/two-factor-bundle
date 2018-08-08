@@ -63,10 +63,6 @@ class TwoFactorFactory implements SecurityFactoryInterface
 
     public function create(ContainerBuilder $container, $firewallName, $config, $userProvider, $defaultEntryPoint)
     {
-        if (isset($config['csrf_token_generator'])) {
-            $config['csrf_token_generator'] = new Reference($config['csrf_token_generator']);
-        }
-
         $providerId = $this->createAuthenticationProvider($container, $firewallName, $config);
         $listenerId = $this->createAuthenticationListener($container, $firewallName, $config);
         $this->createTwoFactorFirewallConfig($container, $firewallName, $config);
@@ -151,10 +147,14 @@ class TwoFactorFactory implements SecurityFactoryInterface
 
     private function createCsrfTokenValidator(ContainerBuilder $container, string $firewallName, array $config): string
     {
+        $csrf_token_manager = isset($config['csrf_token_generator'])
+            ? new Reference($config['csrf_token_generator'])
+            : new Reference('scheb_two_factor.null_csrf_token_manager');
+
         $csrfTokenValidatorId = self::CSRF_TOKEN_VALIDATOR_ID_PREFIX.$firewallName;
         $container
             ->setDefinition($csrfTokenValidatorId, new ChildDefinition(self::CSRF_TOKEN_VALIDATOR_DEFINITION_ID))
-            ->replaceArgument(0, $firewallName)
+            ->replaceArgument(0, $csrf_token_manager)
             ->replaceArgument(1, $config);
 
         return $csrfTokenValidatorId;

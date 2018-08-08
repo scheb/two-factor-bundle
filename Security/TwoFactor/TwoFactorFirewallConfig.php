@@ -3,7 +3,6 @@
 namespace Scheb\TwoFactorBundle\Security\TwoFactor;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class TwoFactorFirewallConfig
 {
@@ -32,9 +31,9 @@ class TwoFactorFirewallConfig
         return $this->options['trusted_parameter_name'] ?? TwoFactorFactory::DEFAULT_TRUSTED_PARAMETER_NAME;
     }
 
-    public function getCsrfTokenGenerator(): ?CsrfTokenManagerInterface
+    public function isCsrfProtectionEnabled(): bool
     {
-        return $this->options['csrf_token_generator'] ?? TwoFactorFactory::DEFAULT_CSRF_TOKEN_GENERATOR;
+        return $this->options['csrf_token_generator'] !== TwoFactorFactory::DEFAULT_CSRF_TOKEN_GENERATOR;
     }
 
     public function getCsrfParameterName(): string

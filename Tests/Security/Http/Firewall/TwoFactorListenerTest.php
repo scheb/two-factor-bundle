@@ -8,7 +8,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\Authentication\Voter\TwoFactorInProgressVoter;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener;
-use Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfTokenValidator;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
@@ -23,7 +23,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
@@ -70,6 +69,7 @@ class TwoFactorListenerTest extends TestCase
     /**
      * @var MockObject|CsrfTokenValidator
      */
+
     private $csrfTokenValidator;
     /**
      * @var MockObject|TrustedDeviceManagerInterface
@@ -154,15 +154,9 @@ class TwoFactorListenerTest extends TestCase
             'check_path' => self::CHECK_PATH,
             'auth_code_parameter_name' => self::AUTH_CODE_PARAM,
             'trusted_parameter_name' => self::TRUSTED_PARAM,
-            'csrf_token_generator' => null,
         ];
 
-        $this->listener = $this->createTwoFactorListener($options);
-    }
-
-    private function createTwoFactorListener(array $options): TwoFactorListener
-    {
-        return new TwoFactorListener(
+        $this->listener = new TwoFactorListener(
             $this->tokenStorage,
             $this->authenticationManager,
             $this->httpUtils,
@@ -391,6 +385,7 @@ class TwoFactorListenerTest extends TestCase
     {
         $this->stubTokenManagerHasToken($this->createTwoFactorToken());
         $this->stubCurrentPath(self::CHECK_PATH);
+        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
         $this->stubHandlersReturnResponse();
 
         $tokenAssert = function ($token): bool {
@@ -417,6 +412,7 @@ class TwoFactorListenerTest extends TestCase
     {
         $this->stubTokenManagerHasToken($this->createTwoFactorToken());
         $this->stubCurrentPath(self::CHECK_PATH);
+        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
         $this->stubAuthenticationManagerThrowsAuthenticationException();
         $this->stubHandlersReturnResponse();
 
@@ -463,14 +459,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertEventsDispatched([TwoFactorAuthenticationEvents::FAILURE]);
 
-        $listener = $this->createTwoFactorListener([
-            'auth_form_path' => self::FORM_PATH,
-            'check_path' => self::CHECK_PATH,
-            'auth_code_parameter_name' => self::AUTH_CODE_PARAM,
-            'trusted_parameter_name' => self::TRUSTED_PARAM,
-            'csrf_token_generator' => $this->createMock(CsrfTokenManagerInterface::class),
-        ]);
-        $listener->handle($this->getResponseEvent);
+        $this->listener->handle($this->getResponseEvent);
     }
 
     /**
@@ -489,14 +478,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::SUCCESS,
         ]);
 
-        $listener = $this->createTwoFactorListener([
-            'auth_form_path' => self::FORM_PATH,
-            'check_path' => self::CHECK_PATH,
-            'auth_code_parameter_name' => self::AUTH_CODE_PARAM,
-            'trusted_parameter_name' => self::TRUSTED_PARAM,
-            'csrf_token_generator' => $this->createMock(CsrfTokenManagerInterface::class),
-        ]);
-        $listener->handle($this->getResponseEvent);
+        $this->listener->handle($this->getResponseEvent);
     }
 
     /**
@@ -507,6 +489,7 @@ class TwoFactorListenerTest extends TestCase
         $twoFactorToken = $this->createTwoFactorToken();
         $this->stubTokenManagerHasToken($twoFactorToken);
         $this->stubCurrentPath(self::CHECK_PATH);
+        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
         $this->stubAuthenticationManagerReturnsToken($twoFactorToken); // Must be TwoFactorToken
 
         $this->assertEventsDispatched([
@@ -525,6 +508,7 @@ class TwoFactorListenerTest extends TestCase
         $twoFactorToken = $this->createTwoFactorToken();
         $this->stubTokenManagerHasToken($twoFactorToken);
         $this->stubCurrentPath(self::CHECK_PATH);
+        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
         $this->stubAuthenticationManagerReturnsToken($twoFactorToken); // Must be TwoFactorToken
 
         $this->authenticationRequiredHandler
@@ -544,6 +528,7 @@ class TwoFactorListenerTest extends TestCase
     {
         $this->stubTokenManagerHasToken($this->createTwoFactorToken());
         $this->stubCurrentPath(self::CHECK_PATH);
+        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
         $this->stubAuthenticationManagerReturnsToken($this->createMock(TokenInterface::class)); // Not a TwoFactorToken
 
         $response = $this->createMock(Response::class);
@@ -567,6 +552,7 @@ class TwoFactorListenerTest extends TestCase
     {
         $this->stubTokenManagerHasToken($this->createTwoFactorToken());
         $this->stubCurrentPath(self::CHECK_PATH);
+        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
         $this->stubAuthenticationManagerReturnsToken($this->createMock(TokenInterface::class)); // Not a TwoFactorToken
         $this->stubHandlersReturnResponse();
 
@@ -592,6 +578,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->stubTokenManagerHasToken($this->createTwoFactorToken());
         $this->stubCurrentPath(self::CHECK_PATH);
+        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
         $this->stubRequestHasParameter(self::TRUSTED_PARAM, '1');
         $this->stubAuthenticationManagerReturnsToken($authenticatedToken); // Not a TwoFactorToken
         $this->stubHandlersReturnResponse();
@@ -611,6 +598,7 @@ class TwoFactorListenerTest extends TestCase
     {
         $this->stubTokenManagerHasToken($this->createTwoFactorToken());
         $this->stubCurrentPath(self::CHECK_PATH);
+        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
         $this->stubRequestHasParameter(self::TRUSTED_PARAM, '0');
         $this->stubAuthenticationManagerReturnsToken($this->createMock(TokenInterface::class)); // Not a TwoFactorToken
         $this->stubHandlersReturnResponse();

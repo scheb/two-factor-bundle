@@ -1,9 +1,9 @@
 <?php
 
-namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\CsrfProtection;
+namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Csrf;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfTokenValidator;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,8 +11,6 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class CsrfTokenValidatorTest extends TestCase
 {
-    private const FIREWALL_NAME = 'firewallName';
-    private const CSRF_TOKEN_GENERATOR = null;
     private const CSRF_PARAMETER_NAME = 'parameter_name';
     private const CSRF_TOKEN_ID = 'token_id';
 
@@ -50,17 +48,11 @@ class CsrfTokenValidatorTest extends TestCase
         $this->csrfTokenGenerator = $this->createMock(CsrfTokenManagerInterface::class);
 
         $options = [
-            'csrf_token_generator' => self::CSRF_TOKEN_GENERATOR,
             'csrf_parameter_name' => self::CSRF_PARAMETER_NAME,
             'csrf_token_id' => self::CSRF_TOKEN_ID,
         ];
 
-        $this->csrfTokenValidator = new CsrfTokenValidator(self::FIREWALL_NAME, $options);
-    }
-
-    private function createCsrfTokenValidator(array $options): CsrfTokenValidator
-    {
-        return new CsrfTokenValidator(self::FIREWALL_NAME, $options);
+        $this->csrfTokenValidator = new CsrfTokenValidator($this->csrfTokenGenerator, $options);
     }
 
     private function stubTokenIsInvalid(): void
@@ -82,41 +74,11 @@ class CsrfTokenValidatorTest extends TestCase
     /**
      * @test
      */
-    public function supports_firewallNameNotTheSame_returnFalse()
-    {
-        $this->assertFalse($this->csrfTokenValidator->supports('fooBar'));
-    }
-
-    /**
-     * @test
-     */
-    public function supports_firewallNameTheSame_returnTrue()
-    {
-        $this->assertTrue($this->csrfTokenValidator->supports(self::FIREWALL_NAME));
-    }
-
-    /**
-     * @test
-     */
-    public function hasValidCsrfToken_csrfTokenGeneratorIsNull_returnFalse()
-    {
-        $this->assertFalse($this->csrfTokenValidator->hasValidCsrfToken($this->request));
-    }
-
-    /**
-     * @test
-     */
     public function hasValidCsrfToken_tokenIsInvalid_returnFalse()
     {
         $this->stubTokenIsInvalid();
 
-        $csrfTokenValidator = $this->createCsrfTokenValidator([
-            'csrf_token_generator' => $this->csrfTokenGenerator,
-            'csrf_parameter_name' => self::CSRF_PARAMETER_NAME,
-            'csrf_token_id' => self::CSRF_TOKEN_ID,
-        ]);
-
-        $this->assertFalse($csrfTokenValidator->hasValidCsrfToken($this->request));
+        $this->assertFalse($this->csrfTokenValidator->hasValidCsrfToken($this->request));
     }
 
     /**
@@ -126,12 +88,6 @@ class CsrfTokenValidatorTest extends TestCase
     {
         $this->stubTokenIsValid();
 
-        $csrfTokenValidator = $this->createCsrfTokenValidator([
-            'csrf_token_generator' => $this->csrfTokenGenerator,
-            'csrf_parameter_name' => self::CSRF_PARAMETER_NAME,
-            'csrf_token_id' => self::CSRF_TOKEN_ID,
-        ]);
-
-        $this->assertTrue($csrfTokenValidator->hasValidCsrfToken($this->request));
+        $this->assertTrue($this->csrfTokenValidator->hasValidCsrfToken($this->request));
     }
 }

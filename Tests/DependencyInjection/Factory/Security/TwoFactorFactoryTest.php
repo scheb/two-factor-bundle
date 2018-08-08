@@ -261,7 +261,22 @@ EOF;
 
         $this->assertTrue($this->container->hasDefinition('security.authentication.csrf_token_validator.two_factor.firewallName'));
         $definition = $this->container->getDefinition('security.authentication.csrf_token_validator.two_factor.firewallName');
+        $this->assertEquals(new Reference('scheb_two_factor.null_csrf_token_manager'), $definition->getArgument(0));
         $this->assertEquals(self::DEFAULT_CONFIG, $definition->getArgument(1));
+    }
+
+    /**
+     * @test
+     */
+    public function create_createForFirewall_useCustomCsrfTokenGenerator()
+    {
+        $csrfTokenGeneratorDefinitionId = 'security.csrf.token_manager';
+        $this->callCreateFirewall(['csrf_token_generator' => $csrfTokenGeneratorDefinitionId]);
+
+        $this->assertTrue($this->container->hasDefinition('security.authentication.csrf_token_validator.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authentication.csrf_token_validator.two_factor.firewallName');
+        $this->assertEquals(new Reference($csrfTokenGeneratorDefinitionId), $definition->getArgument(0));
+        $this->assertEquals(array_merge(self::DEFAULT_CONFIG, ['csrf_token_generator' => $csrfTokenGeneratorDefinitionId]), $definition->getArgument(1));
     }
 
     /**

@@ -59,10 +59,12 @@
 			<argument type="collection" /> <!-- Options -->
 		</service>
 
-		<service id="scheb_two_factor.security.authentication.csrf_token_validator" class="Scheb\TwoFactorBundle\Security\TwoFactor\CsrfProtection\CsrfTokenValidator" abstract="true">
-			<argument type="string" /> <!-- Firewall name -->
+		<service id="scheb_two_factor.security.authentication.csrf_token_validator" class="Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator" abstract="true">
+			<argument /> <!-- CSRF token manager -->
 			<argument type="collection" /> <!-- Options -->
 		</service>
+
+		<service id="scheb_two_factor.null_csrf_token_manager" class="Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\NullCsrfTokenManager" />
 
 		<service id="scheb_two_factor.security.firewall_config" class="Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig" abstract="true">
 			<argument type="collection" /> <!-- Options -->
