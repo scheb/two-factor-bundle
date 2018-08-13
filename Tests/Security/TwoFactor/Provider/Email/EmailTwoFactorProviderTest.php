@@ -62,23 +62,6 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_twoFactorPossible_codeGenerated()
-    {
-        $user = $this->createUser(true);
-        $context = $this->createAuthenticationContext($user);
-
-        //Mock the CodeGenerator
-        $this->generator
-            ->expects($this->once())
-            ->method('generateAndSend')
-            ->with($user);
-
-        $this->provider->beginAuthentication($context);
-    }
-
-    /**
-     * @test
-     */
     public function beginAuthentication_twoFactorPossible_returnTrue()
     {
         $user = $this->createUser(true);
@@ -110,6 +93,37 @@ class EmailTwoFactorProviderTest extends TestCase
 
         $returnValue = $this->provider->beginAuthentication($context);
         $this->assertFalse($returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function prepareAuthentication_interfaceNotImplemented_doNothing()
+    {
+        $user = new \stdClass();
+
+        //Mock the CodeGenerator
+        $this->generator
+            ->expects($this->never())
+            ->method('generateAndSend');
+
+        $this->provider->prepareAuthentication($user);
+    }
+
+    /**
+     * @test
+     */
+    public function prepareAuthentication_interfaceImplemented_codeGenerated()
+    {
+        $user = $this->createUser(true);
+
+        //Mock the CodeGenerator
+        $this->generator
+            ->expects($this->once())
+            ->method('generateAndSend')
+            ->with($user);
+
+        $this->provider->prepareAuthentication($user);
     }
 
     /**
