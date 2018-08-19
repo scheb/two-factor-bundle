@@ -83,7 +83,7 @@ For a guard based authentication method it would be needed to support `Symfony\C
 ### Step 6: Enable two-factor authentication methods
 
 The two-factor authentication methods need to be enabled separately. Read how to do this for
-[Google Authenticator](providers/google.md) or [email authentication](providers/email.md).
+[Google Authenticator](providers/google.md), [TOTP Authenticator](providers/totp.md) or [email authentication](providers/email.md).
 
 ### Step 7: Detailed configuration
 

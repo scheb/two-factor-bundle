@@ -3,6 +3,7 @@
 namespace Scheb\TwoFactorBundle\Tests\DependencyInjection;
 
 use Scheb\TwoFactorBundle\DependencyInjection\SchebTwoFactorExtension;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -47,6 +48,14 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter(null, 'scheb_two_factor.google.issuer');
         $this->assertParameter('@SchebTwoFactor/Authentication/form.html.twig', 'scheb_two_factor.google.template');
         $this->assertParameter(6, 'scheb_two_factor.google.digits');
+        $this->assertParameter(null, 'scheb_two_factor.totp.issuer');
+        $this->assertParameter(6, 'scheb_two_factor.totp.digits');
+        $this->assertParameter('sha1', 'scheb_two_factor.totp.digest');
+        $this->assertParameter(30, 'scheb_two_factor.totp.period');
+        $this->assertParameter([], 'scheb_two_factor.totp.parameters');
+        $this->assertParameter('https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl={PROVISIONING_URI}', 'scheb_two_factor.totp.qr_code_generator');
+        $this->assertParameter('{PROVISIONING_URI}', 'scheb_two_factor.totp.qr_code_data_placeholder');
+        $this->assertParameter('@SchebTwoFactor/Authentication/form.html.twig', 'scheb_two_factor.totp.template');
         $this->assertParameter(false, 'scheb_two_factor.trusted_device.enabled');
         $this->assertParameter(5184000, 'scheb_two_factor.trusted_device.lifetime');
         $this->assertParameter(false, 'scheb_two_factor.trusted_device.extend_lifetime');
@@ -74,6 +83,14 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter('Issuer', 'scheb_two_factor.google.issuer');
         $this->assertParameter('AcmeTestBundle:Authentication:googleForm.html.twig', 'scheb_two_factor.google.template');
         $this->assertParameter(8, 'scheb_two_factor.google.digits');
+        $this->assertParameter('Issuer', 'scheb_two_factor.totp.issuer');
+        $this->assertParameter(8, 'scheb_two_factor.totp.digits');
+        $this->assertParameter('sha256', 'scheb_two_factor.totp.digest');
+        $this->assertParameter(20, 'scheb_two_factor.totp.period');
+        $this->assertParameter(['image' => 'http://foo/bar.png'], 'scheb_two_factor.totp.parameters');
+        $this->assertParameter('http://api.qrserver.com/v1/create-qr-code/?color=5330FF&bgcolor=70FF7E&data=[DATA]&qzone=2&margin=0&size=300x300&ecc=H', 'scheb_two_factor.totp.qr_code_generator');
+        $this->assertParameter('[DATA]', 'scheb_two_factor.totp.qr_code_data_placeholder');
+        $this->assertParameter('AcmeTestBundle:Authentication:totpForm.html.twig', 'scheb_two_factor.totp.template');
         $this->assertParameter(true, 'scheb_two_factor.trusted_device.enabled');
         $this->assertParameter(2592000, 'scheb_two_factor.trusted_device.lifetime');
         $this->assertParameter(true, 'scheb_two_factor.trusted_device.extend_lifetime');
@@ -97,6 +114,11 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertNotHasDefinition('scheb_two_factor.security.google_authenticator');
         $this->assertNotHasDefinition('scheb_two_factor.security.google.provider');
 
+        //TOTP
+        $this->assertNotHasDefinition('scheb_two_factor.security.totp');
+        $this->assertNotHasDefinition('scheb_two_factor.security.totp_authenticator');
+        $this->assertNotHasDefinition('scheb_two_factor.security.totp.provider');
+
         //Email
         $this->assertNotHasDefinition('scheb_two_factor.security.email.default_auth_code_mailer');
         $this->assertNotHasDefinition('scheb_two_factor.security.email.code_generator');
@@ -111,9 +133,25 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertHasDefinition('scheb_two_factor.security.google');
         $this->assertHasDefinition('scheb_two_factor.security.google_authenticator');
         $this->assertHasDefinition('scheb_two_factor.security.google.provider');
+    }
+
+    /**
+     * @test
+     */
+    public function load_totpAuthEnabled_loadTotpFactoryServices()
+    {
+        $config = $this->getFullConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasDefinition('scheb_two_factor.security.totp_factory');
+
+        /** @var TotpFactory $service */
+        $service = $this->container->get('scheb_two_factor.security.totp_factory');
+        $totp = $service->generateNewTotp();
+        $totp->setLabel('Alice');
+        $this->assertContains('otpauth://totp/Issuer%3AAlice?algorithm=sha256&digits=8&image=http%3A%2F%2Ffoo%2Fbar.png&issuer=Issuer&period=20&secret=', $totp->getProvisioningUri());
     }
 
     /**
@@ -357,6 +395,17 @@ google:
     server_name: Server Name
     template: AcmeTestBundle:Authentication:googleForm.html.twig
     digits: 8
+totp:
+    enabled: true
+    issuer: Issuer
+    digits: 8
+    digest: 'sha256'
+    period: 20
+    parameters:
+        image: 'http://foo/bar.png'
+    qr_code_generator: 'http://api.qrserver.com/v1/create-qr-code/?color=5330FF&bgcolor=70FF7E&data=[DATA]&qzone=2&margin=0&size=300x300&ecc=H'
+    qr_code_data_placeholder: '[DATA]'
+    template: AcmeTestBundle:Authentication:totpForm.html.twig
 EOF;
         $parser = new Parser();
 
