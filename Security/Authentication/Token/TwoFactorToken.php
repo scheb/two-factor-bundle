@@ -5,7 +5,7 @@ namespace Scheb\TwoFactorBundle\Security\Authentication\Token;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class TwoFactorToken implements TokenInterface
+class TwoFactorToken implements TwoFactorTokenInterface
 {
     /**
      * @var TokenInterface
