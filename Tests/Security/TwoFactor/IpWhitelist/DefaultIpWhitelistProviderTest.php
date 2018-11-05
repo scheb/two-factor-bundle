@@ -3,8 +3,11 @@
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\IpWhitelist;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext;
+use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactory;
 use Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\DefaultIpWhitelistProvider;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class DefaultIpWhitelistProviderTest extends TestCase
 {
