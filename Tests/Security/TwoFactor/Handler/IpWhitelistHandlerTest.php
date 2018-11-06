@@ -28,14 +28,11 @@ class IpWhitelistHandlerTest extends AuthenticationHandlerTestCase
             '2001:db8:abcd:0012::0/64',
         ];
 
-        $request = $this->createRequestWithIp('1.1.1.1');
-        $authenticationContext = $this->createAuthenticationContext($request);
         $this->innerAuthenticationHandler = $this->getAuthenticationHandlerMock();
         $ipWhitelistProvider = $this->createMock(IpWhitelistProviderInterface::class);
         $ipWhitelistProvider
             ->expects($this->any())
             ->method('getWhitelistedIps')
-            ->with($authenticationContext)
             ->willReturn($ipWhitelist);
 
         $this->ipWhitelistHandler = new IpWhitelistHandler($this->innerAuthenticationHandler, $ipWhitelistProvider);
