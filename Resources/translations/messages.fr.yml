@@ -1,6 +1,0 @@
-scheb_two_factor:
-    auth_code: Code d'authentification
-    login: Connexion
-    code_invalid: Le code de vérification n'est pas valide.
-    trusted: Je suis sur un ordinateur de confiance
-    cancel: Annuler

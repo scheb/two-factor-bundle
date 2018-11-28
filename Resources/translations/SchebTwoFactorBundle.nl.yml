@@ -1,0 +1,6 @@
+auth_code: Authenticatiecode
+choose_provider: Kies een andere authenticatiemethode
+login: Login
+code_invalid: De verificatiecode is niet geldig.
+trusted: Ik gebruik een vertrouwde computer
+cancel: Annuleren
