@@ -30,10 +30,11 @@ class IpWhitelistHandler implements AuthenticationHandlerInterface
         $request = $context->getRequest();
 
         // Support of X-Forwarded-For header (when sitting behind a proxy or a load balancer)
-        $clientIp = $request->headers->get('X-Forwarded-For');
-        if (!$clientIp) {
-            $clientIp = $request->getClientIp();
+        $clientIp = $request->getClientIp();
+        if (!is_null($request->headers) && $request->headers->get('X-Forwarded-For')) {
+            $clientIp = $request->headers->get('X-Forwarded-For');
         }
+
 
         // Skip two-factor authentication for whitelisted IPs
         if (IpUtils::checkIp($clientIp, $this->ipWhitelistProvider->getWhitelistedIps())) {
