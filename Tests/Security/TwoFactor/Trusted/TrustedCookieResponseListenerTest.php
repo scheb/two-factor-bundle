@@ -32,7 +32,7 @@ class TrustedCookieResponseListenerTest extends TestCase
     {
         $this->trustedTokenStorage = $this->createMock(TrustedDeviceTokenStorage::class);
         $this->cookieResponseListener = new TestableTrustedCookieResponseListener($this->trustedTokenStorage,
-            3600, 'cookieName', true, Cookie::SAMESITE_LAX);
+            3600, 'cookieName', true, Cookie::SAMESITE_LAX, null);
         $this->cookieResponseListener->now = new \DateTime('2018-01-01 00:00:00');
         $this->response = new Response();
     }
