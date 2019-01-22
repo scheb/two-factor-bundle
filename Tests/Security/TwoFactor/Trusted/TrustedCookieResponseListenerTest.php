@@ -134,6 +134,41 @@ class TrustedCookieResponseListenerTest extends TestCase
 
     /**
      * @test
+     */
+    public function onKernelResponse_setCookieDomain(): void
+    {
+        $domain = '.test.me';
+
+        $this->cookieResponseListener = new TestableTrustedCookieResponseListener($this->trustedTokenStorage,
+        3600, 'cookieName', true, Cookie::SAMESITE_LAX, $domain);
+        $this->cookieResponseListener->now = new \DateTime('2018-01-01 00:00:00');
+
+        $this->trustedTokenStorage
+            ->expects($this->once())
+            ->method('hasUpdatedCookie')
+            ->willReturn(true);
+
+        $event = $this->createEvent();
+        $this->cookieResponseListener->onKernelResponse($event);
+        $cookies = $this->response->headers->getCookies();
+        $this->assertCount(1, $cookies, 'Response must have a cookie set.');
+
+        $expectedCookie = new Cookie(
+            'cookieName',
+            null,
+            new \DateTime('2018-01-01 01:00:00'),
+            '/',
+            $domain,
+            true,
+            true,
+            false,
+            Cookie::SAMESITE_LAX
+        );
+        $this->assertEquals($expectedCookie, $cookies[0]);
+    }
+
+    /**
+     * @test
      * @dataProvider provideRequestHostName
      */
     public function onKernelResponse_excludedHostNames_notSetDomain(string $requestHostName): void
