@@ -1,6 +1,6 @@
 <?php
 
-namespace Scheb\TwoFactorBundle\Security\Authentication\Voter;
+namespace Scheb\TwoFactorBundle\Security\Authorization\Voter;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
