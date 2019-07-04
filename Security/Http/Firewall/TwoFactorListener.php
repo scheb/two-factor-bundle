@@ -14,6 +14,7 @@ use Scheb\TwoFactorBundle\Security\Http\ParameterBagUtils;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -158,18 +159,20 @@ class TwoFactorListener implements ListenerInterface
             return;
         }
 
+
+        if ($this->isAuthFormRequest($request)) {
+            $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::REQUIRE, $request, $currentToken);
+
+            return;
+        }
+
         // Let routes pass, e.g. if a route needs to be callable during two-factor authentication
         if ($this->twoFactorAccessDecider->isAccessible($request, $currentToken)) {
             return;
         }
 
-        if (!$this->isAuthFormRequest($request)) {
-            $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::REQUIRE, $request, $currentToken);
-            $response = $this->authenticationRequiredHandler->onAuthenticationRequired($request, $currentToken);
-            $event->setResponse($response);
-
-            return;
-        }
+        $response = $this->authenticationRequiredHandler->onAuthenticationRequired($request, $currentToken);
+        $event->setResponse($response);
     }
 
     private function isCheckAuthCodeRequest(Request $request): bool
@@ -227,8 +230,6 @@ class TwoFactorListener implements ListenerInterface
 
         // When it's still a TwoFactorToken, keep showing the auth form
         if ($token instanceof TwoFactorTokenInterface) {
-            $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::REQUIRE, $request, $token);
-
             return $this->authenticationRequiredHandler->onAuthenticationRequired($request, $token);
         }
 

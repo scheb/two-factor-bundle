@@ -363,15 +363,13 @@ class TwoFactorListenerTest extends TestCase
     /**
      * @test
      */
-    public function handle_neitherFormNorCheckPath_dispatchRequireEvent(): void
+    public function handle_neitherFormNorCheckPath_doNothing(): void
     {
         $this->stubTokenManagerHasToken($this->createTwoFactorToken());
         $this->stubCurrentPath('/some_other_path');
         $this->stubPathAccessGranted(false);
 
-        $this->assertEventsDispatched([
-            TwoFactorAuthenticationEvents::REQUIRE,
-        ]);
+        $this->assertNoResponseSet();
 
         $this->listener->handle($this->getResponseEvent);
     }
@@ -399,6 +397,9 @@ class TwoFactorListenerTest extends TestCase
         $this->stubCurrentPath(self::FORM_PATH);
 
         $this->assertNoResponseSet();
+        $this->assertEventsDispatched([
+            TwoFactorAuthenticationEvents::REQUIRE,
+        ]);
 
         $this->listener->handle($this->getResponseEvent);
     }
@@ -502,7 +503,6 @@ class TwoFactorListenerTest extends TestCase
         $this->assertEventsDispatched([
             TwoFactorAuthenticationEvents::ATTEMPT,
             TwoFactorAuthenticationEvents::SUCCESS,
-            $this->anything(),
         ]);
 
         $this->listener->handle($this->getResponseEvent);
@@ -543,7 +543,6 @@ class TwoFactorListenerTest extends TestCase
         $this->assertEventsDispatched([
             TwoFactorAuthenticationEvents::ATTEMPT,
             TwoFactorAuthenticationEvents::SUCCESS,
-            TwoFactorAuthenticationEvents::REQUIRE,
         ]);
 
         $this->listener->handle($this->getResponseEvent);
