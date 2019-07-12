@@ -23,7 +23,7 @@
 			<argument type="service" id="scheb_two_factor.ip_whitelist_provider" />
 		</service>
 
-		<service id="scheb_two_factor.default_ip_whitelist_provider" class="\Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\DefaultIpWhitelistProvider">
+		<service id="scheb_two_factor.default_ip_whitelist_provider" class="Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\DefaultIpWhitelistProvider">
 			<argument>%scheb_two_factor.ip_whitelist%</argument>
 		</service>
 
