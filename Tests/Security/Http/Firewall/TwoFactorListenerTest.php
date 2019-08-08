@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -145,7 +146,12 @@ class TwoFactorListenerTest extends TestCase
                 return $this->requestParams[$param];
             });
 
-        $this->getResponseEvent = $this->createMock(GetResponseEvent::class);
+        // Symfony < 4.3
+        if (!class_exists(RequestEvent::class)) {
+            $this->getResponseEvent = $this->createMock(GetResponseEvent::class);
+        } else {
+            $this->getResponseEvent = $this->createMock(RequestEvent::class);
+        }
         $this->getResponseEvent
             ->expects($this->any())
             ->method('getRequest')
@@ -160,22 +166,44 @@ class TwoFactorListenerTest extends TestCase
             'trusted_parameter_name' => self::TRUSTED_PARAM,
         ];
 
-        $this->listener = new TwoFactorListener(
-            $this->tokenStorage,
-            $this->authenticationManager,
-            $this->httpUtils,
-            self::FIREWALL_NAME,
-            $this->successHandler,
-            $this->failureHandler,
-            $this->authenticationRequiredHandler,
-            $this->csrfTokenValidator,
-            $options,
-            $this->trustedDeviceManager,
-            $this->twoFactorAccessDecider,
-            $this->eventDispatcher,
-            $this->twoFactorTokenFactory,
-            $this->createMock(LoggerInterface::class)
-        );
+        // Symfony < 4.3
+        if (!class_exists(RequestEvent::class)) {
+            $this->listener = new TwoFactorListener(
+                $this->tokenStorage,
+                $this->authenticationManager,
+                $this->httpUtils,
+                self::FIREWALL_NAME,
+                $this->successHandler,
+                $this->failureHandler,
+                $this->authenticationRequiredHandler,
+                $this->csrfTokenValidator,
+                $options,
+                $this->trustedDeviceManager,
+                $this->twoFactorAccessDecider,
+                $this->eventDispatcher,
+                $this->twoFactorTokenFactory,
+                $this->createMock(LoggerInterface::class)
+            );
+        } else {
+            $this->listener = function ($event) use ($options) {
+                return (new TwoFactorListener(
+                    $this->tokenStorage,
+                    $this->authenticationManager,
+                    $this->httpUtils,
+                    self::FIREWALL_NAME,
+                    $this->successHandler,
+                    $this->failureHandler,
+                    $this->authenticationRequiredHandler,
+                    $this->csrfTokenValidator,
+                    $options,
+                    $this->trustedDeviceManager,
+                    $this->twoFactorAccessDecider,
+                    $this->eventDispatcher,
+                    $this->twoFactorTokenFactory,
+                    $this->createMock(LoggerInterface::class)
+                ))($event);
+            };
+        }
     }
 
     /**
@@ -331,7 +359,7 @@ class TwoFactorListenerTest extends TestCase
         $this->assertPathNotChecked();
         $this->assertNoResponseSet();
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -344,7 +372,7 @@ class TwoFactorListenerTest extends TestCase
         $this->assertPathNotChecked();
         $this->assertNoResponseSet();
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -363,7 +391,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertRedirectToAuthForm();
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -379,7 +407,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::REQUIRE,
         ]);
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -393,7 +421,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertNoResponseSet();
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -406,7 +434,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertNoResponseSet();
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -434,7 +462,7 @@ class TwoFactorListenerTest extends TestCase
             ->with($this->identicalTo($credentialToken))
             ->willReturn($this->createMock(TokenInterface::class));
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -453,7 +481,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::FAILURE,
         ]);
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -476,7 +504,7 @@ class TwoFactorListenerTest extends TestCase
             ->method('setResponse')
             ->with($this->identicalTo($response));
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -491,7 +519,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertEventsDispatched([TwoFactorAuthenticationEvents::FAILURE]);
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -511,7 +539,7 @@ class TwoFactorListenerTest extends TestCase
             $this->anything(),
         ]);
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -532,7 +560,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertRedirectToAuthForm();
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -552,7 +580,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::REQUIRE,
         ]);
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -576,7 +604,7 @@ class TwoFactorListenerTest extends TestCase
             ->method('setResponse')
             ->with($this->identicalTo($response));
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -596,7 +624,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::COMPLETE,
         ]);
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -622,7 +650,7 @@ class TwoFactorListenerTest extends TestCase
             ->method('addTrustedDevice')
             ->with('user', 'firewallName');
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
     }
 
     /**
@@ -641,6 +669,16 @@ class TwoFactorListenerTest extends TestCase
             ->expects($this->never())
             ->method($this->anything());
 
-        $this->listener->handle($this->getResponseEvent);
+        $this->doHandleOrInvoke($this->getResponseEvent);
+    }
+
+    private function doHandleOrInvoke($event)
+    {
+        // Symfony < 4.3
+        if (!class_exists(RequestEvent::class)) {
+            $this->listener->doHandleOrInvoke($event);
+        } else {
+            ($this->listener)($event);
+        }
     }
 }
