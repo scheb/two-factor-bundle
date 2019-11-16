@@ -2,7 +2,6 @@
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
