@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class TrustedCookieResponseListenerTest extends TestCase
 {
@@ -56,11 +57,17 @@ class TrustedCookieResponseListenerTest extends TestCase
     /**
      * @param MockObject $request
      *
-     * @return MockObject|FilterResponseEvent
+     * @return MockObject|FilterResponseEvent|RequestEvent
      */
-    private function createEventWithRequest(MockObject $request): FilterResponseEvent
+    private function createEventWithRequest(MockObject $request)
     {
-        $event = $this->createMock(FilterResponseEvent::class);
+        // Symfony < 4.3
+        if (!class_exists(RequestEvent::class)) {
+            $event = $this->createMock(FilterResponseEvent::class);
+        } else {
+            $event = $this->createMock(RequestEvent::class);
+        }
+
         $event
             ->expects($this->any())
             ->method('getRequest')
@@ -74,7 +81,7 @@ class TrustedCookieResponseListenerTest extends TestCase
     }
 
     /**
-     * @return MockObject|FilterResponseEvent
+     * @return MockObject|FilterResponseEvent|RequestEvent
      */
     private function createEvent(): MockObject
     {
