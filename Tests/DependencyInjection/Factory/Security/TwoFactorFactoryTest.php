@@ -307,6 +307,21 @@ EOF;
         $tag = $definition->getTag('scheb_two_factor.firewall_config');
         $this->assertEquals(['firewall' => 'firewallName'], $tag[0]);
     }
+
+    /**
+     * @test
+     */
+    public function create_createForFirewall_createAuthenticationSuccessEventSuppressorDefinition(): void
+    {
+        $this->callCreateFirewall();
+
+        $this->assertTrue($this->container->hasDefinition('security.authentication.authentication_success_event_suppressor.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authentication.authentication_success_event_suppressor.two_factor.firewallName');
+        $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(0));
+        $tag = $definition->getTag('kernel.event_listener');
+        $this->assertCount(1, $tag, 'Must have 4 events subscribed');
+        $this->assertEquals(['event' => 'security.authentication.success', 'method' => 'onLogin', 'priority' => PHP_INT_MAX - 1], $tag[0]);
+    }
 }
 
 // Helper class to process config
