@@ -2,10 +2,12 @@
 
 namespace Scheb\TwoFactorBundle\DependencyInjection;
 
+use Scheb\TwoFactorBundle\DependencyInjection\Compiler\RememberMeServicesDecoratorCompilerPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface;
 
 class SchebTwoFactorExtension extends Extension
 {
@@ -61,6 +63,9 @@ class SchebTwoFactorExtension extends Extension
         if (true === $config['backup_codes']['enabled']) {
             $this->configureBackupCodeManager($container, $config);
         }
+
+        // Tag remember-me services for further processing
+        $this->tagRememberMeServices($container);
     }
 
     private function configurePersister(ContainerBuilder $container, array $config): void
@@ -132,5 +137,12 @@ class SchebTwoFactorExtension extends Extension
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('two_factor_provider_google.xml');
+    }
+
+    private function tagRememberMeServices(ContainerBuilder $container)
+    {
+        $container
+            ->registerForAutoconfiguration(RememberMeServicesInterface::class)
+            ->addTag(RememberMeServicesDecoratorCompilerPass::REMEMBER_ME_SERVICES_TAG);
     }
 }

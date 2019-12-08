@@ -36,12 +36,8 @@ class RememberMeServicesDecoratorCompilerPassTest extends TestCase
         foreach ($firewalls as $firewallName) {
             $rememberMeServicesId = 'rememberme_services.'.$firewallName;
             $rememberMeServicesDefinition = new Definition(AbstractRememberMeServices::class);
+            $rememberMeServicesDefinition->addTag('scheb_two_factor.security.rememberme_services');
             $this->container->setDefinition($rememberMeServicesId, $rememberMeServicesDefinition);
-
-            $listenerId = 'security.authentication.listener.rememberme.'.$firewallName;
-            $listenerDefinition = new Definition(RememberMeListener::class);
-            $listenerDefinition->setArgument(1, new Reference($rememberMeServicesId));
-            $this->container->setDefinition($listenerId, $listenerDefinition);
         }
     }
 

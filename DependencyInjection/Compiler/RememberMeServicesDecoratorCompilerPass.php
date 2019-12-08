@@ -16,29 +16,31 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class RememberMeServicesDecoratorCompilerPass implements CompilerPassInterface
 {
-    private const REMEMBER_ME_LISTENER_ID_PREFIX = 'security.authentication.listener.rememberme.';
+    public const REMEMBER_ME_SERVICES_TAG = 'scheb_two_factor.security.rememberme_services';
 
     public function process(ContainerBuilder $container)
     {
-        // Find all remember-me listener definitions
-        $prefixLength = strlen(self::REMEMBER_ME_LISTENER_ID_PREFIX);
-        foreach ($container->getDefinitions() as $definitionId => $definition) {
-            if (substr($definitionId, 0, $prefixLength) === self::REMEMBER_ME_LISTENER_ID_PREFIX) {
-                $this->decorateRememberMeServices($container, $definition);
-            }
+        // Find all remember-me services definitions
+        foreach ($container->findTaggedServiceIds(self::REMEMBER_ME_SERVICES_TAG) as $definitionId => $attributes) {
+            $this->decorateRememberMeServices($container, $definitionId);
+            $this->clearTag($container, $definitionId);
         }
     }
 
-    private function decorateRememberMeServices(ContainerBuilder $container, Definition $authListenerDefinition): void
+    private function decorateRememberMeServices(ContainerBuilder $container, string $rememberMeServicesId): void
     {
-        // Get the remember-me services from the listener and decorate it
-        $rememberMeServicesId = (string) $authListenerDefinition->getArgument(1);
-        if ($rememberMeServicesId) {
-            $decoratedServiceId = $rememberMeServicesId.'.two_factor_decorator';
-            $container
-                ->setDefinition($decoratedServiceId, new ChildDefinition('scheb_two_factor.security.rememberme_services_decorator'))
-                ->setDecoratedService($rememberMeServicesId)
-                ->replaceArgument(0, new Reference($decoratedServiceId.'.inner'));
-        }
+        $decoratedServiceId = $rememberMeServicesId.'.two_factor_decorator';
+        $container
+            ->setDefinition($decoratedServiceId, new ChildDefinition(self::REMEMBER_ME_SERVICES_TAG.'_decorator'))
+            ->setDecoratedService($rememberMeServicesId)
+            ->replaceArgument(0, new Reference($decoratedServiceId.'.inner'));
+    }
+
+    private function clearTag(ContainerBuilder $container, string $rememberMeServicesId): void
+    {
+        $container
+            ->findDefinition($rememberMeServicesId)
+            ->clearTag(self::REMEMBER_ME_SERVICES_TAG);
+
     }
 }
