@@ -54,6 +54,10 @@
 			<argument /> <!-- Decorated listener -->
 		</service>
 
+		<service id="scheb_two_factor.security.rememberme_services_decorator" class="\Scheb\TwoFactorBundle\Security\Authentication\RememberMe\RememberMeServicesDecorator" abstract="true">
+			<argument /> <!-- Decorated remember-me services instance -->
+		</service>
+
 		<service id="scheb_two_factor.security.authentication_success_event_suppressor" class="Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationSuccessEventSuppressor" abstract="true">
 			<argument type="string" /> <!-- Firewall name -->
 			<!-- These events must be added when the child definition is created -->
