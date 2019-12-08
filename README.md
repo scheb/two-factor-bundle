@@ -50,6 +50,9 @@ Before version 3.7 the bundle is vulnerable to a
 exploited by an attacker to generate trusted device cookies on their own, effectively by-passing two-factor
 authentication.
 
+Before versions 3.26.0 / 4.11.0 it was possible to bypass two-factor authentication when the remember-me option is
+available on the login form. ([#253](https://github.com/scheb/two-factor-bundle/issues/253))
+
 Contribute
 ----------
 You're welcome to [contribute](https://github.com/scheb/two-factor-bundle/graphs/contributors) to this bundle by
