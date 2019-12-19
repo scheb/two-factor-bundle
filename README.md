@@ -39,9 +39,10 @@ Detailed documentation of all features can be found in the [Resources/doc](Resou
 
 Compatibility
 -------------
-- **Recommended version**: Bundle version 3.x is compatible with Symfony 3.4 and 4.x
-- Use bundle version 2.x for Symfony < 3.4
-- Use bundle version 1.x for Symfony < 2.6
+- **Recommended version:** Bundle version 4.x is compatible with Symfony 3.4, 4.x and 5.x.
+- Bundle version 3.x is compatible with Symfony 3.4, 4.x and 5.x.
+
+Previous versions are no longer maintained, please consider upgrading.
 
 Security
 --------
