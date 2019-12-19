@@ -16,8 +16,14 @@ In addition to this it provides an interface for implementing your own custom tw
 [![Latest Stable Version](https://poser.pugx.org/scheb/two-factor-bundle/v/stable.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
 [![License](https://poser.pugx.org/scheb/two-factor-bundle/license.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
 
-Limitations
------------
+Security Considerations
+-----------------------
+
+**Version 2.x is no longer maintained. Please upgrade your project to a recent version.**
+
+In this version of the bundle it was possible to bypass two-factor authentication when the remember-me option is
+available on the login form. ([#253](https://github.com/scheb/two-factor-bundle/issues/253))
+
 After the initial login happened, the user is already fully authenticated to the Symfony security layer. The bundle
 then prevents access to secured and non-secured content by intercepting any request and showing the two-factor
 authentication form instead.
