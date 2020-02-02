@@ -14,8 +14,6 @@ class DoctrinePersister implements PersisterInterface
 
     /**
      * Initialize a persister for doctrine entities.
-     *
-     * @param ObjectManager $om
      */
     public function __construct(ObjectManager $om)
     {

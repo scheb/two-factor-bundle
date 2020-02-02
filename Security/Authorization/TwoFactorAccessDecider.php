@@ -65,12 +65,12 @@ class TwoFactorAccessDecider
     private function makeRelativeToBaseUrl(string $logoutPath, Request $request): string
     {
         $baseUrl = $request->getBaseUrl();
-        if (null === $baseUrl || strlen($baseUrl) === 0) {
+        if (null === $baseUrl || 0 === strlen($baseUrl)) {
             return $logoutPath;
         }
 
         $pathInfo = substr($logoutPath, strlen($baseUrl));
-        if ($pathInfo === false || $pathInfo === '') {
+        if (false === $pathInfo || '' === $pathInfo) {
             return '/';
         }
 

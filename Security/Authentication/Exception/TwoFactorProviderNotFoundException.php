@@ -27,10 +27,10 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
 
     public function serialize()
     {
-        return serialize(array(
+        return serialize([
             $this->provider,
             parent::serialize(),
-        ));
+        ]);
     }
 
     public function unserialize($str)
@@ -41,6 +41,6 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
 
     public function getMessageData()
     {
-        return array('{{ provider }}' => $this->provider);
+        return ['{{ provider }}' => $this->provider];
     }
 }

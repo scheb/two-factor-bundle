@@ -23,8 +23,6 @@ class GoogleAuthenticatorTest extends TestCase
     /**
      * @param string|null $hostname
      * @param string|null $issuer
-     *
-     * @return GoogleAuthenticator
      */
     private function createAuthenticator($hostname = null, $issuer = null): GoogleAuthenticator
     {
@@ -58,8 +56,6 @@ class GoogleAuthenticatorTest extends TestCase
 
     /**
      * Test data for checkCode: code, input, result.
-     *
-     * @return array
      */
     public function getCheckCodeData(): array
     {

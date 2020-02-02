@@ -53,8 +53,6 @@ class TrustedCookieResponseListenerTest extends TestCase
     }
 
     /**
-     * @param string $host
-     *
      * @return MockObject|Request
      */
     private function createRequestWithHost(string $host = 'example.org'): MockObject
@@ -69,8 +67,6 @@ class TrustedCookieResponseListenerTest extends TestCase
     }
 
     /**
-     * @param MockObject $request
-     *
      * @return MockObject|FilterResponseEvent|RequestEvent
      */
     private function createEventWithRequest(MockObject $request)
