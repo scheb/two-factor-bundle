@@ -28,6 +28,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
     {
         if (\interface_exists(TransportInterface::class) === false) {
             $this->markTestSkipped("Symfony mailer not installed");
+
             return;
         }
         $this->symfonyTransportInterface = $this->createMock(TransportInterface::class);
