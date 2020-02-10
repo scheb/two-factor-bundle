@@ -16,9 +16,13 @@ matrix:
     - php: 7.4
       env: SYMFONY_VERSION=^3.4
     - php: 7.4
-      env: SYMFONY_VERSION=^4.0
+      env:
+        - SYMFONY_VERSION=^4.0
+        - MAILER_VERSION=^4.0
     - php: 7.4
-      env: SYMFONY_VERSION=^5.0
+      env:
+        - SYMFONY_VERSION=^5.0
+        - MAILER_VERSION=^5.0
 
 cache:
   directories:
@@ -26,7 +30,7 @@ cache:
 
 before_install:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
-  - if [ "$SYMFONY_VERSION" != "^3.4" ]; then composer require "symfony/mailer:${SYMFONY_VERSION}" --no-update; fi;
+  - if [ "$MAILER_VERSION" != "" ]; then composer require "symfony/mailer:${MAILER_VERSION}" --no-update; fi;
 
 install:
   - composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
