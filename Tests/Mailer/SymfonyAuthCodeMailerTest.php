@@ -8,16 +8,15 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Mailer\SymfonyAuthCodeMailer;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mailer\Transport\TransportInterface;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
 class SymfonyAuthCodeMailerTest extends TestCase
 {
     /**
-     * @var MockObject|TransportInterface
+     * @var MockObject|MailerInterface
      */
-    private $symfonyTransportInterface;
+    private $symfonyMailer;
 
     /**
      * @var SymfonyAuthCodeMailer
@@ -26,13 +25,13 @@ class SymfonyAuthCodeMailerTest extends TestCase
 
     protected function setUp(): void
     {
-        if (\interface_exists(TransportInterface::class) === false) {
+        if (\interface_exists(MailerInterface::class) === false) {
             $this->markTestSkipped("Symfony mailer not installed");
 
             return;
         }
-        $this->symfonyTransportInterface = $this->createMock(TransportInterface::class);
-        $this->mailer = new SymfonyAuthCodeMailer(new Mailer($this->symfonyTransportInterface), 'sender@example.com', 'Sender Name');
+        $this->symfonyMailer = $this->createMock(MailerInterface::class);
+        $this->mailer = new SymfonyAuthCodeMailer($this->symfonyMailer, 'sender@example.com', 'Sender Name');
     }
 
     /**
@@ -63,7 +62,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
         };
 
         //Expect mail to be sent
-        $this->symfonyTransportInterface
+        $this->symfonyMailer
             ->expects($this->once())
             ->method('send')
             ->with($this->callback($messageValidator));
