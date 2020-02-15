@@ -69,7 +69,7 @@ class TrustedCookieResponseListenerTest extends TestCase
     /**
      * @return MockObject|FilterResponseEvent|RequestEvent
      */
-    private function createEventWithRequest(MockObject $request)
+    private function createEventWithRequest(MockObject $request): MockObject
     {
         // Symfony < 4.3
         if (!class_exists(RequestEvent::class)) {
