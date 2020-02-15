@@ -62,20 +62,10 @@ authentication. ([#143](https://github.com/scheb/two-factor-bundle/issues/143))
 - Before versions 3.26.0 / 4.11.0 it was possible to bypass two-factor authentication when the remember-me option is
 available on the login form. ([#253](https://github.com/scheb/two-factor-bundle/issues/253))
 
-Contribute
-----------
-You're welcome to [contribute](https://github.com/scheb/two-factor-bundle/graphs/contributors) to this bundle by
-creating a pull requests or feature request in the issues section. For pull requests, please follow these guidelines:
+Contributing
+------------
 
-- Symfony code style (use `php_cs.xml` to configure the code style in your IDE)
-- PHP7.1 type hints for everything (including: return types, `void`, nullable types)
-- `declare(strict_types=1)` must be used
-- Please add/update test cases
-- Test methods should be named `[method]_[scenario]_[expected result]`
-
-Besides new features, [translations](Resources/translations) are highly welcome.
-
-To run the test suite install the dependencies with `composer install` and then execute `bin/phpunit`.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 License
 -------
