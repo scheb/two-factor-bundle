@@ -1,6 +1,9 @@
 scheb/two-factor-bundle
 =======================
 
+This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki/Multi-factor_authentication) for your
+[Symfony](https://symfony.com/) application**.
+
 [![Build Status](https://travis-ci.org/scheb/two-factor-bundle.svg?branch=master)](https://travis-ci.org/scheb/two-factor-bundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=master)
@@ -8,8 +11,9 @@ scheb/two-factor-bundle
 [![Total Downloads](https://poser.pugx.org/scheb/two-factor-bundle/downloads)](https://packagist.org/packages/scheb/two-factor-bundle)
 [![License](https://poser.pugx.org/scheb/two-factor-bundle/license.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
 
-This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki/Multi-factor_authentication) for your
-[Symfony](https://symfony.com/) application**.
+<p align="center"><img alt="Logo" src="Resources/doc/2fa-logo.svg"></p>
+
+---
 
 It comes with the following two-factor authentication methods:
 
