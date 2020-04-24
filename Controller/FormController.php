@@ -98,6 +98,8 @@ class FormController
         $pendingTwoFactorProviders = $token->getTwoFactorProviders();
         $displayTrustedOption = $this->trustedFeatureEnabled && (!$config->isMultiFactor() || 1 === count($pendingTwoFactorProviders));
         $authenticationException = $this->getLastAuthenticationException($request->getSession());
+        $checkPath = $config->getCheckPath();
+        $isRoute = strpos($checkPath, '/') === false;
 
         return [
             'twoFactorProvider' => $token->getCurrentTwoFactorProvider(),
@@ -110,6 +112,8 @@ class FormController
             'isCsrfProtectionEnabled' => $config->isCsrfProtectionEnabled(),
             'csrfParameterName' => $config->getCsrfParameterName(),
             'csrfTokenId' => $config->getCsrfTokenId(),
+            'checkPathRoute' => $isRoute ? $checkPath:null,
+            'checkPathUrl' => $isRoute ? null:$checkPath,
             'logoutPath' => $this->logoutUrlGenerator->getLogoutPath(),
         ];
     }
