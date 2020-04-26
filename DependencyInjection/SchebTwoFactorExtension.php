@@ -14,6 +14,9 @@ class SchebTwoFactorExtension extends Extension
     const DEFAULT_TRUSTED_DEVICE_MANAGER = 'scheb_two_factor.default_trusted_device_manager';
     const DEFAULT_BACKUP_CODE_MANAGER = 'scheb_two_factor.default_backup_code_manager';
 
+    /**
+     * @return void
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();

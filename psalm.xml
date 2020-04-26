@@ -11,6 +11,8 @@
 		<ignoreFiles>
 			<directory name="vendor" />
 			<directory name="Tests" />
+			<file name="Security/Http/Firewall/LegacyTwoFactorListener.php" />
+			<file name="Security/TwoFactor/Event/Event.php" />
 		</ignoreFiles>
     </projectFiles>
 </psalm>

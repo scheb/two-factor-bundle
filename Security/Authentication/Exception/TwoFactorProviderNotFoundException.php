@@ -10,14 +10,20 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
 {
     public const MESSAGE_KEY = 'Two-factor provider not found.';
 
+    /**
+     * @var string|null
+     */
     private $provider;
 
+    /**
+     * @return string
+     */
     public function getMessageKey()
     {
         return self::MESSAGE_KEY;
     }
 
-    public function getProvider(): string
+    public function getProvider(): ?string
     {
         return $this->provider;
     }
@@ -27,17 +33,31 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
         $this->provider = $provider;
     }
 
+    /**
+     * @return string
+     */
     public function serialize()
     {
+        /**
+         * @phpcs:disable Symfony.Formatting.BlankLineBeforeReturnSniff
+         * @psalm-suppress UndefinedMethod
+         */
         return serialize([
             $this->provider,
             parent::serialize(),
         ]);
+        /** @phpcs:enable Symfony.Formatting.BlankLineBeforeReturnSniff */
     }
 
+    /**
+     * @param string $str
+     *
+     * @return void
+     */
     public function unserialize($str)
     {
         list($this->provider, $parentData) = unserialize($str);
+        /** @psalm-suppress UndefinedMethod */
         parent::unserialize($parentData);
     }
 

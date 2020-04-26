@@ -15,6 +15,9 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AuthenticationProviderDecoratorCompilerPass implements CompilerPassInterface
 {
+    /**
+     * @return void
+     */
     public function process(ContainerBuilder $container)
     {
         $authenticationManager = $container->getDefinition('security.authentication.manager');

@@ -15,7 +15,7 @@ class DoctrinePersisterFactory
     private $managerRegistry;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $objectManagerName;
 
@@ -33,6 +33,10 @@ class DoctrinePersisterFactory
 
     public function getPersister(): PersisterInterface
     {
-        return new DoctrinePersister($this->managerRegistry->getManager($this->objectManagerName));
+        $objectManager = $this->managerRegistry->getManager($this->objectManagerName);
+        /** @psalm-suppress ArgumentTypeCoercion */
+        $persister = new DoctrinePersister($objectManager);
+
+        return $persister;
     }
 }

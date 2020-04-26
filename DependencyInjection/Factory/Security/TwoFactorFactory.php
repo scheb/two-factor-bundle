@@ -50,10 +50,18 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const PROVIDER_PREPARATION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.provider_preparation_listener';
     public const AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_ID = 'scheb_two_factor.security.authentication_success_event_suppressor';
 
+    /**
+     * @return void
+     */
     public function addConfiguration(NodeDefinition $node)
     {
         /** @var ArrayNodeDefinition $node */
         $builder = $node->children();
+
+        /**
+         * @psalm-suppress PossiblyNullReference
+         * @psalm-suppress PossiblyUndefinedMethod
+         */
         $builder
             ->scalarNode('check_path')->defaultValue(self::DEFAULT_CHECK_PATH)->end()
             ->scalarNode('auth_form_path')->defaultValue(self::DEFAULT_AUTH_FORM_PATH)->end()
@@ -75,13 +83,21 @@ class TwoFactorFactory implements SecurityFactoryInterface
         ;
     }
 
-    public function create(ContainerBuilder $container, $firewallName, $config, $userProvider, $defaultEntryPoint)
+    /**
+     * @param string $id
+     * @param array $config
+     * @param string $userProvider
+     * @param string|null $defaultEntryPoint
+     *
+     * @return array
+     */
+    public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint)
     {
-        $providerId = $this->createAuthenticationProvider($container, $firewallName, $config);
-        $listenerId = $this->createAuthenticationListener($container, $firewallName, $config);
-        $this->createProviderPreparationListener($container, $firewallName, $config);
-        $this->createAuthenticationSuccessEventSuppressor($container, $firewallName, $config);
-        $this->createTwoFactorFirewallConfig($container, $firewallName, $config);
+        $providerId = $this->createAuthenticationProvider($container, $id, $config);
+        $listenerId = $this->createAuthenticationListener($container, $id, $config);
+        $this->createProviderPreparationListener($container, $id, $config);
+        $this->createAuthenticationSuccessEventSuppressor($container, $id);
+        $this->createTwoFactorFirewallConfig($container, $id, $config);
 
         return [$providerId, $listenerId, $defaultEntryPoint];
     }
@@ -213,7 +229,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->addTag('kernel.event_listener', ['event' => 'kernel.finish_request', 'method' => 'onKernelFinishRequest']);
     }
 
-    private function createAuthenticationSuccessEventSuppressor(ContainerBuilder $container, string $firewallName, array $config): void
+    private function createAuthenticationSuccessEventSuppressor(ContainerBuilder $container, string $firewallName): void
     {
         $firewallConfigId = self::AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_ID_PREFIX.$firewallName;
         $container

@@ -13,6 +13,9 @@ class InvalidTwoFactorCodeException extends AuthenticationException
      */
     private $messageKey = 'Invalid two-factor authentication code.';
 
+    /**
+     * @return string
+     */
     public function getMessageKey()
     {
         return $this->messageKey;
@@ -23,6 +26,9 @@ class InvalidTwoFactorCodeException extends AuthenticationException
         $this->messageKey = $messageKey;
     }
 
+    /**
+     * @return string
+     */
     public function serialize()
     {
         return serialize($this->__serialize());
@@ -32,11 +38,17 @@ class InvalidTwoFactorCodeException extends AuthenticationException
     public function __serialize(): array
     {
         $parentHasNewInterface = method_exists(get_parent_class($this), '__serialize');
+        /** @psalm-suppress UndefinedMethod */
         $parentData = $parentHasNewInterface ? parent::__serialize() : parent::serialize();
 
         return [$this->messageKey, $parentData];
     }
 
+    /**
+     * @param string|array $serialized
+     *
+     * @return void
+     */
     public function unserialize($serialized)
     {
         $this->__unserialize(\is_array($serialized) ? $serialized : unserialize($serialized));
@@ -49,6 +61,7 @@ class InvalidTwoFactorCodeException extends AuthenticationException
         if (\is_array($parentData)) {
             parent::__unserialize($parentData);
         } else {
+            /** @psalm-suppress UndefinedMethod */
             parent::unserialize($parentData);
         }
     }

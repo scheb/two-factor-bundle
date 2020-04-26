@@ -64,7 +64,10 @@ class TrustedCookieResponseListener
     }
 
     /**
-     * @param $event FilterResponseEvent|ResponseEvent
+     * @psalm-suppress UndefinedDocblockClass
+     * @psalm-suppress UndefinedClass
+     *
+     * @param FilterResponseEvent|ResponseEvent $event
      */
     public function onKernelResponse($event): void
     {

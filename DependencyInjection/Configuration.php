@@ -17,9 +17,14 @@ class Configuration implements ConfigurationInterface
             $rootNode = $treeBuilder->getRootNode();
         } else {
             // BC layer for symfony/config 4.1 and older
+            /** @psalm-suppress UndefinedMethod */
             $rootNode = $treeBuilder->root('scheb_two_factor');
         }
 
+        /**
+         * @psalm-suppress PossiblyNullReference
+         * @psalm-suppress PossiblyUndefinedMethod
+         */
         $rootNode
             ->children()
                 ->scalarNode('persister')->defaultNull()->end()

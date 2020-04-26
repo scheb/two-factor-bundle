@@ -18,6 +18,9 @@ class RememberMeServicesDecoratorCompilerPass implements CompilerPassInterface
 {
     private const REMEMBER_ME_LISTENER_ID_PREFIX = 'security.authentication.listener.rememberme.';
 
+    /**
+     * @return void
+     */
     public function process(ContainerBuilder $container)
     {
         // Find all remember-me listener definitions

@@ -14,15 +14,21 @@ use Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface;
 class RememberMeServicesDecorator implements RememberMeServicesInterface, LogoutHandlerInterface
 {
     /**
-     * @var RememberMeServicesInterface|LogoutHandlerInterface
+     * @var RememberMeServicesInterface&LogoutHandlerInterface
      */
     private $decoratedRememberMeServices;
 
+    /**
+     * @param RememberMeServicesInterface&LogoutHandlerInterface $decoratedRememberMeServices
+     */
     public function __construct($decoratedRememberMeServices)
     {
         $this->decoratedRememberMeServices = $decoratedRememberMeServices;
     }
 
+    /**
+     * @return void
+     */
     public function loginSuccess(Request $request, Response $response, TokenInterface $token)
     {
         if ($token instanceof TwoFactorTokenInterface) {
@@ -37,22 +43,34 @@ class RememberMeServicesDecorator implements RememberMeServicesInterface, Logout
         }
     }
 
+    /**
+     * @return TokenInterface|null
+     */
     public function autoLogin(Request $request)
     {
         return $this->decoratedRememberMeServices->autoLogin($request);
     }
 
+    /**
+     * @return void
+     */
     public function loginFail(Request $request, \Exception $exception = null)
     {
         $this->decoratedRememberMeServices->loginFail($request, $exception);
     }
 
+    /**
+     * @return void
+     */
     public function logout(Request $request, Response $response, TokenInterface $token)
     {
         $this->decoratedRememberMeServices->logout($request, $response, $token);
     }
 
-    public function __call($method, $arguments)
+    /**
+     * @return mixed
+     */
+    public function __call(string $method, array $arguments)
     {
         return ($this->decoratedRememberMeServices)->{$method}(...$arguments);
     }
