@@ -11,6 +11,10 @@ scheb/two-factor-bundle
 This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki/Multi-factor_authentication) for your
 [Symfony](https://symfony.com/) application**.
 
+**⚠️ Version 3.x is no longer maintained. Please upgrade your project to a recent version.**
+
+---
+
 It comes with the following two-factor authentication methods:
 
 - [TOTP authentication](https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm)
