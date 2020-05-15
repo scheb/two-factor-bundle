@@ -105,6 +105,7 @@ class TwoFactorListener
      * @var LoggerInterface
      */
     private $logger;
+
     /**
      * @var TwoFactorAccessDecider
      */
