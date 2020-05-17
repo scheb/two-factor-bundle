@@ -139,7 +139,7 @@ class SchebTwoFactorExtension extends Extension
         $codeGeneratorService = $config['email']['code_generator'];
         if ($codeGeneratorService) {
             $container->removeAlias('scheb_two_factor.security.email.code_generator');
-            $container->setAlias('scheb_two_factor.security.email.code_generator', $codeGeneratorService);
+            $container->setAlias('scheb_two_factor.security.email.code_generator', $codeGeneratorService)->setPublic(true);
         }
     }
 

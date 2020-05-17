@@ -15,7 +15,7 @@
 			<argument>%scheb_two_factor.email.digits%</argument>
 		</service>
 
-		<service id="scheb_two_factor.security.email.code_generator" alias="scheb_two_factor.security.email.default_code_generator" />
+		<service id="scheb_two_factor.security.email.code_generator" alias="scheb_two_factor.security.email.default_code_generator" public="true" />
 
 		<!-- Aliases for auto-wiring -->
 		<service id="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface" alias="scheb_two_factor.security.email.code_generator" public="true" />
