@@ -29,6 +29,8 @@ Your user entity has to implement `Scheb\TwoFactorBundle\Model\Google\TwoFactorI
 Authenticator for a user, generate a secret code and persist it with the user entity.
 
 ```php
+<?php
+
 namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -104,6 +106,8 @@ $secret = $container->get("scheb_two_factor.security.google_authenticator")->gen
 With Symfony 4, you can use auto-wiring dependency injection to get the services:
 
 ```php
+<?php
+
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 
 public function generateSecret(GoogleAuthenticatorInterface $googleAuthenticatorService)

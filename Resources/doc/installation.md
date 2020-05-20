@@ -21,6 +21,8 @@ composer require scheb/two-factor-bundle
 Enable this bundle in your `config/bundles.php`:
 
 ```php
+<?php
+
 return [
 	// ...
     Scheb\TwoFactorBundle\SchebTwoFactorBundle::class => ['all' => true],

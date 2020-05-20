@@ -34,6 +34,8 @@ We warned, custom configurations will not be compatible with the defaults of Goo
 have to use another application (e.g. FreeOTP on Android).
 
 ```php
+<?php
+
 namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -119,6 +121,8 @@ $secret = $container->get("scheb_two_factor.security.totp_authenticator")->gener
 With Symfony 4, you can use auto-wiring dependency injection to get the services:
 
 ```php
+<?php
+
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
 
 public function generateSecret(TotpAuthenticatorInterface $totpAuthenticatorService)
