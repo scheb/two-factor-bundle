@@ -47,7 +47,7 @@ Detailed documentation of all features can be found in the [Resources/doc](Resou
 Security Issues
 ---------------
 
-⚠️ Version 3.x is no longer maintained. Please upgrade your project to a recent version.
+**⚠️ Version 3.x is no longer maintained. Please upgrade your project to a recent version.**
 
 If you think that you have found a security issue in the bundle, don't use the bug tracker and don't publish it
 publicly. Instead, please report via email to me@christianscheb.de.
