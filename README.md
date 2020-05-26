@@ -1,6 +1,8 @@
 scheb/two-factor-bundle
 =======================
 
+**⚠️ Version 2.x is no longer maintained. Please upgrade your project to a recent version.**
+
 This Symfony bundle provides two-factor authentication for your website. Currently it is shipped with two authentication methods:
 
   - Google Authenticator (via sonata-project/google-authenticator)
@@ -19,7 +21,7 @@ In addition to this it provides an interface for implementing your own custom tw
 Security Considerations
 -----------------------
 
-**Version 2.x is no longer maintained. Please upgrade your project to a recent version.**
+**⚠️ Version 2.x is no longer maintained. Please upgrade your project to a recent version.**
 
 In this version of the bundle it was possible to bypass two-factor authentication when the remember-me option is
 available on the login form. ([#253](https://github.com/scheb/two-factor-bundle/issues/253))
