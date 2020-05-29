@@ -129,5 +129,6 @@ security:
 ```
 
 For detailed information on the authentication methods see the individual documentation:
+- [TOTP](providers/totp.md)
 - [Google Authenticator](providers/google.md)
 - [Email code](providers/email.md)
