@@ -15,4 +15,14 @@
 			<file name="Security/TwoFactor/Event/Event.php" />
 		</ignoreFiles>
     </projectFiles>
+
+	<issueHandlers>
+		<DeprecatedClass errorLevel="info" />
+		<DeprecatedConstant errorLevel="info" />
+		<DeprecatedFunction errorLevel="info" />
+		<DeprecatedInterface errorLevel="info" />
+		<DeprecatedMethod errorLevel="info" />
+		<DeprecatedProperty errorLevel="info" />
+		<DeprecatedTrait errorLevel="info" />
+	</issueHandlers>
 </psalm>
