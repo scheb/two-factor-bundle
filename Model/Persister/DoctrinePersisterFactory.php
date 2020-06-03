@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Model\Persister;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Scheb\TwoFactorBundle\Model\PersisterInterface;
 
 class DoctrinePersisterFactory
 {
     /**
-     * @var ManagerRegistry
+     * @var ManagerRegistry|LegacyManagerRegistry
      */
     private $managerRegistry;
 
@@ -19,7 +20,10 @@ class DoctrinePersisterFactory
      */
     private $objectManagerName;
 
-    public function __construct(?ManagerRegistry $managerRegistry, ?string $objectManagerName)
+    /**
+     * @param ManagerRegistry|LegacyManagerRegistry|null $managerRegistry
+     */
+    public function __construct($managerRegistry, ?string $objectManagerName)
     {
         if (!$managerRegistry) {
             $msg = 'scheb/two-factor-bundle requires Doctrine to manage the user entity. If you don\'t want something else ';
@@ -34,9 +38,7 @@ class DoctrinePersisterFactory
     public function getPersister(): PersisterInterface
     {
         $objectManager = $this->managerRegistry->getManager($this->objectManagerName);
-        /** @psalm-suppress ArgumentTypeCoercion */
-        $persister = new DoctrinePersister($objectManager);
 
-        return $persister;
+        return new DoctrinePersister($objectManager);
     }
 }
