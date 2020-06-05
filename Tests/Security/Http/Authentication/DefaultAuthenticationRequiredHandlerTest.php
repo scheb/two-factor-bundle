@@ -44,13 +44,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
     {
         $this->httpUtils = $this->createMock(HttpUtils::class);
         $this->request = $this->createMock(Request::class);
-
         $this->authFormRedirectResponse = $this->createMock(RedirectResponse::class);
-        $this->httpUtils
-            ->expects($this->any())
-            ->method('createRedirectResponse')
-            ->with($this->request, self::FORM_PATH)
-            ->willReturn($this->authFormRedirectResponse);
 
         $options = [
             'auth_form_path' => self::FORM_PATH,
@@ -63,6 +57,15 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
             self::FIREWALL_NAME,
             $options
         );
+    }
+
+    private function stubRedirectResponse(): void
+    {
+        $this->httpUtils
+            ->expects($this->any())
+            ->method('createRedirectResponse')
+            ->with($this->request, self::FORM_PATH)
+            ->willReturn($this->authFormRedirectResponse);
     }
 
     private function stubCurrentPath(string $currentPath): void
@@ -164,6 +167,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
     {
         $token = $this->createMock(TokenInterface::class);
         $this->stubCurrentPath('/somePath');
+        $this->stubRedirectResponse();
 
         $this->assertSaveTargetUrl('/somePath');
         $this->handler->onAuthenticationRequired($this->request, $token);
@@ -176,6 +180,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
     {
         $token = $this->createMock(TokenInterface::class);
         $this->stubCurrentPathIsCheckPath();
+        $this->stubRedirectResponse();
 
         $this->assertNotSaveTargetUrl();
         $this->handler->onAuthenticationRequired($this->request, $token);
