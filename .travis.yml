@@ -28,7 +28,6 @@ jobs:
     - php: 7.2
     - php: 7.3
     - php: 7.4
-    - php: nightly
     - php: 7.1
       env:
           - COMPOSER_FLAGS="--prefer-lowest"
@@ -41,6 +40,9 @@ jobs:
     - php: 7.4
       env:
         - SYMFONY_VERSION=^5.0
+    - php: nightly
+      env:
+        - COMPOSER_FLAGS="--ignore-platform-reqs"
 
     # Metrics and Quality
     - name: Code Coverage
