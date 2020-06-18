@@ -11,7 +11,7 @@ This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki
 [![Total Downloads](https://poser.pugx.org/scheb/two-factor-bundle/downloads)](https://packagist.org/packages/scheb/two-factor-bundle)
 [![License](https://poser.pugx.org/scheb/two-factor-bundle/license.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
 
-<p align="center"><img alt="Logo" src="Resources/doc/2fa-logo.svg"></p>
+<p align="center"><img alt="Logo" src="Resources/doc/2fa-logo.svg" /></p>
 
 ℹ️ The repository contains bundle versions 1-4, versions ≥ 5 are located in [scheb/2fa](https://github.com/scheb/2fa).
 
