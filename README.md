@@ -4,9 +4,9 @@ scheb/two-factor-bundle
 This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki/Multi-factor_authentication) for your
 [Symfony](https://symfony.com/) application**.
 
-[![Build Status](https://travis-ci.org/scheb/two-factor-bundle.svg?branch=master)](https://travis-ci.org/scheb/two-factor-bundle/branches)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=master)
+[![Build Status](https://travis-ci.org/scheb/two-factor-bundle.svg?branch=4.x)](https://travis-ci.org/scheb/two-factor-bundle/branches)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/quality-score.png?b=4.x)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=4.x)
+[![Code Coverage](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/coverage.png?b=4.x)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=4.x)
 [![Latest Stable Version](https://poser.pugx.org/scheb/two-factor-bundle/v/stable.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
 [![Total Downloads](https://poser.pugx.org/scheb/two-factor-bundle/downloads)](https://packagist.org/packages/scheb/two-factor-bundle)
 [![License](https://poser.pugx.org/scheb/two-factor-bundle/license.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
@@ -60,8 +60,8 @@ Version Guidance
 [v1-repo]: https://github.com/scheb/two-factor-bundle/tree/1.x
 [v2-repo]: https://github.com/scheb/two-factor-bundle/tree/2.x
 [v3-repo]: https://github.com/scheb/two-factor-bundle/tree/3.x
-[v4-repo]: https://github.com/scheb/two-factor-bundle/tree/master
-[v5-repo]: https://github.com/scheb/2fa/tree/master
+[v4-repo]: https://github.com/scheb/two-factor-bundle/tree/4.x
+[v5-repo]: https://github.com/scheb/2fa/tree/5.x
 
 Security
 --------

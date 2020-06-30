@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 <!--
-Please check the troubleshooting guide first: https://github.com/scheb/two-factor-bundle/blob/master/Resources/doc/troubleshooting.md
+Please check the troubleshooting guide first: https://github.com/scheb/two-factor-bundle/blob/4.x/Resources/doc/troubleshooting.md
 -->
 
 **Bundle version**: x.y.z
