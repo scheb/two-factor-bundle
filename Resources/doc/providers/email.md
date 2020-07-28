@@ -9,6 +9,13 @@ Install the mailer component:
 composer require symfony/swiftmailer-bundle
 ```
 
+Alternatively, you can use `symfony/mailer`, but then you *have* to implement a custom mailer class (see below), since
+the default mailer coming with the bundle only works with Swiftmailer.
+
+You may want to upgrade to bundle version 5 (available from [scheb/2fa](https://github.com/scheb/2fa)) as it supports
+`symfony/mailer` out-of-the-box.
+
+
 ## How it works
 
 On successful authentication it generates a random number and persist it in the user entity. The number is sent to the
