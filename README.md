@@ -49,6 +49,9 @@ Detailed documentation of all features can be found in the [Resources/doc](Resou
 Version Guidance
 ----------------
 
+If you have Symfony >= 4.4 and start using the bundle, please use bundle version 5, which is available from
+the [scheb/2fa](https://github.com/scheb/2fa) repository.
+
 | Version        | Status     | Symfony Version  |
 |----------------|------------|------------------|
 | [1.x][v1-repo] | EOL        | >= 2.1, < 2.7    |
