@@ -6,7 +6,7 @@ Email Authentication
 Install the mailer component:
 
 ```bash
-composer require mailer
+composer require symfony/swiftmailer-bundle
 ```
 
 ## How it works
