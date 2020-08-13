@@ -14,9 +14,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparati
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
 class TwoFactorProviderPreparationListenerTest extends TestCase
@@ -35,17 +35,17 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     private $request;
 
     /**
-     * @var MockObject|SessionInterface
+     * @var MockObject|TwoFactorProviderPreparationRecorder
      */
     private $preparationRecorder;
 
     /**
      * @var MockObject|TwoFactorToken
      */
-    private $token;
+    private $twoFactorToken;
 
     /**
-     * @var
+     * @var \stdClass
      */
     private $user;
 
@@ -58,16 +58,16 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     {
         $this->request = $this->createMock(Request::class);
         $this->user = new \stdClass();
-        $this->token = $this->createMock(TwoFactorToken::class);
-        $this->token
+        $this->twoFactorToken = $this->createMock(TwoFactorToken::class);
+        $this->twoFactorToken
             ->expects($this->any())
             ->method('getProviderKey')
             ->willReturn(self::FIREWALL_NAME);
-        $this->token
+        $this->twoFactorToken
             ->expects($this->any())
             ->method('getCurrentTwoFactorProvider')
             ->willReturn(self::CURRENT_PROVIDER_NAME);
-        $this->token
+        $this->twoFactorToken
             ->expects($this->any())
             ->method('getUser')
             ->willReturn($this->user);
@@ -91,12 +91,12 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
 
     private function createTwoFactorAuthenticationEvent(): TwoFactorAuthenticationEvent
     {
-        return new TwoFactorAuthenticationEvent($this->request, $this->token);
+        return new TwoFactorAuthenticationEvent($this->request, $this->twoFactorToken);
     }
 
-    private function createAuthenticationEvent(): AuthenticationEvent
+    private function createAuthenticationEvent(TokenInterface $token): AuthenticationEvent
     {
-        return new AuthenticationEvent($this->token);
+        return new AuthenticationEvent($token);
     }
 
     private function createFinishRequestEvent(): FinishRequestEvent
@@ -141,7 +141,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     {
         $this->preparationRecorder
             ->expects($this->never())
-            ->method($this->anything());
+            ->method('recordProviderIsPrepared');
 
         $this->providerRegistry
             ->expects($this->never())
@@ -154,7 +154,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     public function onLogin_optionPrepareOnLoginTrue_twoFactorProviderIsPrepared(): void
     {
         $this->initTwoFactorProviderPreparationListener(true, false);
-        $event = $this->createAuthenticationEvent();
+        $event = $this->createAuthenticationEvent($this->twoFactorToken);
 
         $this->expectPrepareCurrentProvider();
 
@@ -168,12 +168,44 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     public function onLogin_optionPrepareOnLoginFalse_twoFactorProviderIsNotPrepared(): void
     {
         $this->initTwoFactorProviderPreparationListener(false, false);
-        $event = $this->createAuthenticationEvent();
+        $event = $this->createAuthenticationEvent($this->twoFactorToken);
 
         $this->expectNotPrepareCurrentProvider();
 
         $this->listener->onLogin($event);
         $this->listener->onKernelFinishRequest($this->createFinishRequestEvent());
+    }
+
+    /**
+     * @test
+     */
+    public function onLogin_twoFactorToken_startRecording(): void
+    {
+        $this->initTwoFactorProviderPreparationListener(false, false);
+        $event = $this->createAuthenticationEvent($this->twoFactorToken);
+
+        $this->preparationRecorder
+            ->expects($this->once())
+            ->method('startRecording')
+            ->with(self::FIREWALL_NAME);
+
+        $this->listener->onLogin($event);
+    }
+
+    /**
+     * @test
+     */
+    public function onLogin_otherToken_doNothing(): void
+    {
+        $this->initTwoFactorProviderPreparationListener(false, false);
+        $token = $this->createMock(TokenInterface::class);
+        $event = $this->createAuthenticationEvent($token);
+
+        $this->preparationRecorder
+            ->expects($this->never())
+            ->method('startRecording');
+
+        $this->listener->onLogin($event);
     }
 
     /**

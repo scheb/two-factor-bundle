@@ -33,6 +33,31 @@ class TwoFactorProviderPreparationRecorderTest extends TestCase
     /**
      * @test
      */
+    public function startRecording_wasPreparedBefore_noLongerPrepared(): void
+    {
+        $this->session
+            ->expects($this->any())
+            ->method('get')
+            ->with('2fa_called_providers')
+            ->willReturn([
+                'otherFirewallName' => [self::CURRENT_PROVIDER_NAME],
+                self::FIREWALL_NAME => [self::CURRENT_PROVIDER_NAME],
+            ]);
+
+        $this->session
+            ->expects($this->once())
+            ->method('set')
+            ->with('2fa_called_providers', [
+                'otherFirewallName' => [self::CURRENT_PROVIDER_NAME],
+                self::FIREWALL_NAME => [],
+            ]);
+
+        $this->recorder->startRecording(self::FIREWALL_NAME);
+    }
+
+    /**
+     * @test
+     */
     public function isProviderPrepared_providerIsNotPrepared_returnFalse(): void
     {
         $this->session

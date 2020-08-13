@@ -28,6 +28,13 @@ class TwoFactorProviderPreparationRecorder
         return \in_array($providerName, $firewallCalledProviders, true);
     }
 
+    public function startRecording(string $firewallName): void
+    {
+        $calledProviders = $this->session->get(self::CALLED_PROVIDERS_SESSION_KEY, []);
+        $calledProviders[$firewallName] = [];
+        $this->session->set(self::CALLED_PROVIDERS_SESSION_KEY, $calledProviders);
+    }
+
     public function recordProviderIsPrepared(string $firewallName, string $providerName): void
     {
         $calledProviders = $this->session->get(self::CALLED_PROVIDERS_SESSION_KEY, []);

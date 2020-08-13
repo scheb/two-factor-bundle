@@ -68,6 +68,12 @@ class TwoFactorProviderPreparationListener
     public function onLogin(AuthenticationEvent $event): void
     {
         $token = $event->getAuthenticationToken();
+
+        if ($token instanceof TwoFactorTokenInterface) {
+            $firewallName = $token->getProviderKey();
+            $this->preparationRecorder->startRecording($firewallName);
+        }
+
         if ($this->prepareOnLogin && $this->supports($token)) {
             /** @var TwoFactorTokenInterface $token */
             // After login, when the token is a TwoFactorTokenInterface, execute preparation
