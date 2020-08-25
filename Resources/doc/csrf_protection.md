@@ -19,7 +19,7 @@ provider available in the security component:
 # app/config/security.yml
 security:
     firewalls:
-        secured_area:
+        your_firewall_name:
             two_factor:
                 csrf_token_generator: security.csrf.token_manager
 ```
@@ -40,7 +40,7 @@ your configuration:
 # app/config/security.yml
 security:
     firewalls:
-        secured_area:
+        your_firewall_name:
             two_factor:
                 csrf_parameter: _csrf_security_token
                 csrf_token_id: a_private_string
