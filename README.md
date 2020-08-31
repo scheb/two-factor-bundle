@@ -52,13 +52,13 @@ Version Guidance
 If you have Symfony >= 4.4 and start using the bundle, please use bundle version 5, which is available from
 the [scheb/2fa](https://github.com/scheb/2fa) repository.
 
-| Version        | Status     | Symfony Version  |
-|----------------|------------|------------------|
-| [1.x][v1-repo] | EOL        | >= 2.1, < 2.7    |
-| [2.x][v2-repo] | EOL        | ^2.6, ^3.0, ^4.0 |
-| [3.x][v3-repo] | EOL        | 3.4, ^4.0, ^5.0  |
-| [4.x][v4-repo] | Maintained | 3.4, ^4.0, ^5.0  |
-| [5.x][v5-repo] | Maintained | 4.4, ^5.0        |
+| Version        | Status                        | Symfony Version  |
+|----------------|-------------------------------|------------------|
+| [1.x][v1-repo] | EOL                           | >= 2.1, < 2.7    |
+| [2.x][v2-repo] | EOL                           | ^2.6, ^3.0, ^4.0 |
+| [3.x][v3-repo] | EOL                           | 3.4, ^4.0, ^5.0  |
+| [4.x][v4-repo] | Security fixes until Nov 2021 | 3.4, ^4.0, ^5.0  |
+| [5.x][v5-repo] | New features + Bug fixes      | 4.4, ^5.0        |
 
 [v1-repo]: https://github.com/scheb/two-factor-bundle/tree/1.x
 [v2-repo]: https://github.com/scheb/two-factor-bundle/tree/2.x
