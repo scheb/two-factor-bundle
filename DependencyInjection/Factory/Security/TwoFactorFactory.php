@@ -88,12 +88,12 @@ class TwoFactorFactory implements SecurityFactoryInterface
     /**
      * @param string $id
      * @param array $config
-     * @param string $userProvider
-     * @param string|null $defaultEntryPoint
+     * @param string $userProviderId
+     * @param string|null $defaultEntryPointId
      *
      * @return array
      */
-    public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint)
+    public function create(ContainerBuilder $container, $id, $config, $userProviderId, $defaultEntryPointId)
     {
         $providerId = $this->createAuthenticationProvider($container, $id, $config);
         $listenerId = $this->createAuthenticationListener($container, $id, $config);
@@ -101,7 +101,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
         $this->createAuthenticationSuccessEventSuppressor($container, $id);
         $this->createTwoFactorFirewallConfig($container, $id, $config);
 
-        return [$providerId, $listenerId, $defaultEntryPoint];
+        return [$providerId, $listenerId, $defaultEntryPointId];
     }
 
     private function createAuthenticationProvider(ContainerBuilder $container, string $firewallName, array $config): string
