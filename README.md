@@ -1,6 +1,10 @@
 scheb/two-factor-bundle
 =======================
 
+### ⚠ Outdated version. Please use versions ≥ 5 from [scheb/2fa](https://github.com/scheb/2fa).
+
+---
+
 This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki/Multi-factor_authentication) for your
 [Symfony](https://symfony.com/) application**.
 
@@ -12,8 +16,6 @@ This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki
 [![License](https://poser.pugx.org/scheb/two-factor-bundle/license.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
 
 <p align="center"><img alt="Logo" src="Resources/doc/2fa-logo.svg" /></p>
-
-ℹ️ The repository contains bundle versions 1-4, versions ≥ 5 are located in [scheb/2fa](https://github.com/scheb/2fa).
 
 ---
 
@@ -49,8 +51,8 @@ Detailed documentation of all features can be found in the [Resources/doc](Resou
 Version Guidance
 ----------------
 
-If you have Symfony >= 4.4 and start using the bundle, please use bundle version 5, which is available from
-the [scheb/2fa](https://github.com/scheb/2fa) repository.
+If you have Symfony ≥ 4.4 and start using the bundle, please use bundle version 5, which is available as
+`scheb/2fa-bundle` from the [scheb/2fa](https://github.com/scheb/2fa) repository.
 
 | Version        | Status                        | Symfony Version  |
 |----------------|-------------------------------|------------------|
