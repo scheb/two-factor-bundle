@@ -8,7 +8,7 @@ scheb/two-factor-bundle
 This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki/Multi-factor_authentication) for your
 [Symfony](https://symfony.com/) application**.
 
-[![Build Status](https://travis-ci.org/scheb/two-factor-bundle.svg?branch=4.x)](https://travis-ci.org/scheb/two-factor-bundle/branches)
+[![Build Status](https://api.travis-ci.com/scheb/two-factor-bundle.svg?branch=4.x)](https://travis-ci.com/scheb/two-factor-bundle/branches)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/quality-score.png?b=4.x)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=4.x)
 [![Code Coverage](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/coverage.png?b=4.x)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=4.x)
 [![Latest Stable Version](https://poser.pugx.org/scheb/two-factor-bundle/v/stable.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
