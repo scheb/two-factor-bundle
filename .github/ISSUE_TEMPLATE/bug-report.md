@@ -13,6 +13,7 @@ Please check the troubleshooting guide first: https://github.com/scheb/two-facto
 
 **Bundle version**: x.y.z
 **Symfony version**: x.y.z
+**PHP version**: x.y.z
 
 **Description**
 <!--
