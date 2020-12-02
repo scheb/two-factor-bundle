@@ -20,4 +20,10 @@
             <directory>./vendor</directory>
         </exclude>
     </coverage>
+
+    <php>
+        <!-- Disable E_USER_DEPRECATED -->
+        <!-- php -r 'echo -1 & ~E_USER_DEPRECATED;' -->
+        <ini name="error_reporting" value="-16385"/>
+    </php>
 </phpunit>
