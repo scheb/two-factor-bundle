@@ -82,7 +82,6 @@ jobs:
                 with:
                     coverage: 'none'
                     php-version: '${{ matrix.php-version }}'
-                    tools: php-cs-fixer
 
             -   name: 'Display PHP versions'
                 run: |
@@ -125,7 +124,6 @@ jobs:
                 with:
                     coverage: 'none'
                     php-version: '${{ matrix.php-version }}'
-                    tools: php-cs-fixer
 
             -   name: 'Display PHP versions'
                 run: |
