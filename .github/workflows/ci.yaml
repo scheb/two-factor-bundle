@@ -141,7 +141,7 @@ jobs:
                 run: composer show
 
             -   name: 'Run tests with coverage'
-                run: phpdbg -qrr ./bin/phpunit --coverage-clover coverage/clover.xml
+                run: phpdbg -qrr bin/phpunit --coverage-clover coverage/clover.xml
 
             -   name: 'Send Coverage'
                 continue-on-error: true
