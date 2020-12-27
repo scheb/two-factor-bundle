@@ -24,7 +24,6 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     coverage: 'none'
-                    extensions: 'json,dom'
                     php-version: '${{ matrix.php-version }}'
                     tools: php-cs-fixer
 
@@ -82,7 +81,6 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     coverage: 'none'
-                    extensions: 'json,dom'
                     php-version: '${{ matrix.php-version }}'
                     tools: php-cs-fixer
 
@@ -126,7 +124,6 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     coverage: 'none'
-                    extensions: 'json,dom'
                     php-version: '${{ matrix.php-version }}'
                     tools: php-cs-fixer
 
