@@ -1,0 +1,154 @@
+name: 'CI'
+
+on:
+    pull_request:
+    push:
+
+jobs:
+    coding-standards:
+        name: 'Coding Standards - PHP ${{ matrix.php-version }}'
+
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version:
+                    - '7.4'
+
+        steps:
+            -   name: 'Checkout code'
+                uses: actions/checkout@v2
+
+            -   name: 'Setup PHP'
+                uses: shivammathur/setup-php@v2
+                with:
+                    coverage: 'none'
+                    extensions: 'json,dom'
+                    php-version: '${{ matrix.php-version }}'
+                    tools: php-cs-fixer
+
+            -   name: 'Display PHP versions'
+                run: |
+                    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+                    php -i
+
+            -   name: 'Install Composer dependencies'
+                uses: ramsey/composer-install@v1
+                with:
+                    composer-options: '--prefer-dist'
+
+            -   name: 'Display dependencies versions'
+                run: composer show
+
+            -   name: "PHP Coding Standards Fixer"
+                run: php-cs-fixer fix --dry-run --diff --using-cache=no
+
+            -   name: "PHP Code Style Sniffer"
+                if: always()
+                run: bin/phpcs --standard=php_cs.xml --ignore=*/vendor/* .
+
+            -   name: "Psalm"
+                if: always()
+                run: bin/psalm
+
+    tests:
+        name: 'Tests - PHP ${{ matrix.php-version }}, Symfony ${{ matrix.symfony-version }}'
+
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    -   php-version: '7.1.3'
+                        dependency-versions: 'lowest'  # Test lowest possible configuration
+                        symfony-version: 'lowest'
+
+                    -   php-version: '7.4'
+                        symfony-version: '^3.4'
+
+                    -   php-version: '7.4'
+                        symfony-version: '^4.0'
+
+                    -   php-version: '7.4'
+                        symfony-version: '^5.0'
+
+        steps:
+            -   name: 'Checkout code'
+                uses: actions/checkout@v2
+
+            -   name: 'Setup PHP'
+                uses: shivammathur/setup-php@v2
+                with:
+                    coverage: 'none'
+                    extensions: 'json,dom'
+                    php-version: '${{ matrix.php-version }}'
+                    tools: php-cs-fixer
+
+            -   name: 'Display PHP versions'
+                run: |
+                    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+                    php -i
+
+            -   name: "Require Symfony version"
+                if: ${{ matrix.symfony-version != 'lowest' }}
+                run: composer require "symfony/symfony:${{ matrix.symfony-version }}" --no-update
+
+            -   name: 'Install Composer dependencies'
+                uses: ramsey/composer-install@v1
+                with:
+                    composer-options: '--prefer-dist'
+                    dependency-versions: '${{ matrix.dependency-versions }}'
+
+            -   name: 'Display dependencies versions'
+                run: composer show
+
+            -   name: 'Run tests'
+                run: bin/phpunit
+
+    code-coverage:
+        name: 'Code Coverage - PHP ${{ matrix.php-version }}'
+
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version:
+                    - '7.4'
+
+        steps:
+            -   name: 'Checkout code'
+                uses: actions/checkout@v2
+
+            -   name: 'Setup PHP'
+                uses: shivammathur/setup-php@v2
+                with:
+                    coverage: 'none'
+                    extensions: 'json,dom'
+                    php-version: '${{ matrix.php-version }}'
+                    tools: php-cs-fixer
+
+            -   name: 'Display PHP versions'
+                run: |
+                    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+                    php -i
+
+            -   name: 'Install Composer dependencies'
+                uses: ramsey/composer-install@v1
+                with:
+                    composer-options: '--prefer-dist'
+
+            -   name: 'Display dependencies versions'
+                run: composer show
+
+            -   name: 'Run tests with coverage'
+                run: phpdbg -qrr ./bin/phpunit --coverage-clover coverage/clover.xml
+
+            -   name: 'Send Coverage'
+                continue-on-error: true
+                timeout-minutes: 1
+                run: |
+                    wget https://scrutinizer-ci.com/ocular.phar
+                    php ocular.phar code-coverage:upload --format=php-clover coverage/clover.xml
