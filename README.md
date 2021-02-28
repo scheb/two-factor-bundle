@@ -11,8 +11,9 @@ This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki
 [![Build Status](https://github.com/scheb/two-factor-bundle/workflows/CI/badge.svg?branch=4.x)](https://github.com/scheb/two-factor-bundle/actions?query=workflow%3ACI+branch%3A4.x)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/quality-score.png?b=4.x)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=4.x)
 [![Code Coverage](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/coverage.png?b=4.x)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=4.x)
-[![Latest Stable Version](https://poser.pugx.org/scheb/two-factor-bundle/v/stable.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
-[![Total Downloads](https://poser.pugx.org/scheb/two-factor-bundle/downloads)](https://packagist.org/packages/scheb/two-factor-bundle)
+[![Latest Stable Version](https://img.shields.io/packagist/v/scheb/two-factor-bundle)](https://packagist.org/packages/scheb/two-factor-bundle)
+[![Monthly Downloads](https://img.shields.io/packagist/dm/scheb/two-factor-bundle)](https://packagist.org/packages/scheb/two-factor-bundle/stats)
+[![Total Downloads](https://img.shields.io/packagist/dt/scheb/two-factor-bundle)](https://packagist.org/packages/scheb/two-factor-bundle/stats)
 [![License](https://poser.pugx.org/scheb/two-factor-bundle/license.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
 
 <p align="center"><img alt="Logo" src="Resources/doc/2fa-logo.svg" /></p>
