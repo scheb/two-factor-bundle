@@ -81,7 +81,8 @@ class AuthenticationProviderDecorator implements AuthenticationProviderInterface
         // in case of Guard, it can return null due to having multiple guard authenticators (#127, to be removed in v5)
         /** @psalm-suppress DocblockTypeContradiction */
         if ($token instanceof AnonymousToken || $token instanceof TwoFactorTokenInterface || null === $token) {
-            /** @psalm-suppress NullableReturnStatement */ return $token;
+            /** @psalm-suppress NullableReturnStatement */
+            return $token; // @phpcs:ignore Symfony.Formatting.BlankLineBeforeReturn.MissedBlankLineBeforeReturn
         }
 
         $request = $this->getRequest();

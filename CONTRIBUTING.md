@@ -33,4 +33,5 @@ Before you create a pull request, please make sure your changes fulfill the qual
 2) Run the PHPUnit tests with `bin/phpunit`
 3) Run PHP CodeSniffer with `bin/phpcs --standard=php_cs.xml --ignore=/vendor/ .`
 4) Run Psalm with `bin/psalm` and address any error-level issues
-5) Run [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) (not provided with the library)
+5) Run [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) v3 (not provided with the library, has to be
+   installed locally): `php-cs-fixer fix`

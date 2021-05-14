@@ -6,13 +6,15 @@ $rules = [
     'phpdoc_to_comment' => false,
     'phpdoc_align' => false,
     'php_unit_method_casing' => false,
+    'visibility_required' => false,
 ];
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
 ;
 
-return PhpCsFixer\Config::create()
+$config = new PhpCsFixer\Config();
+return $config
     ->setFinder($finder)
     ->setRiskyAllowed(true)
     ->setRules($rules)
