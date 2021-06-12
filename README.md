@@ -1,7 +1,7 @@
 scheb/two-factor-bundle
 =======================
 
-### ⚠ Outdated version. Please use versions ≥ 5 from [scheb/2fa](https://github.com/scheb/2fa).
+### ⚠ Outdated version - EOL in November 2021. Please use versions ≥ 5 from [scheb/2fa](https://github.com/scheb/2fa).
 
 ---
 
