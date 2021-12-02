@@ -1,7 +1,10 @@
 scheb/two-factor-bundle
 =======================
 
-### ⚠ Outdated version - EOL in November 2021. Please use versions ≥ 5 from [scheb/2fa](https://github.com/scheb/2fa).
+### ⚠ Unmaintained version
+
+Please upgrade your project to a recent version. Use bundle version 5 (or newer), which is available as
+`scheb/2fa-bundle` from the [scheb/2fa](https://github.com/scheb/2fa) repository.
 
 ---
 
@@ -52,22 +55,10 @@ Detailed documentation of all features can be found in the [Resources/doc](Resou
 Version Guidance
 ----------------
 
-If you have Symfony ≥ 4.4 and start using the bundle, please use bundle version 5, which is available as
+**⚠ Version 4.x is no longer maintained.**
+
+Please upgrade your project to a recent version. Use bundle version 5 (or newer), which is available as
 `scheb/2fa-bundle` from the [scheb/2fa](https://github.com/scheb/2fa) repository.
-
-| Version        | Status                        | Symfony Version  |
-|----------------|-------------------------------|------------------|
-| [1.x][v1-repo] | EOL                           | >= 2.1, < 2.7    |
-| [2.x][v2-repo] | EOL                           | ^2.6, ^3.0, ^4.0 |
-| [3.x][v3-repo] | EOL                           | 3.4, ^4.0, ^5.0  |
-| [4.x][v4-repo] | Security fixes until Nov 2021 | 3.4, ^4.0, ^5.0  |
-| [5.x][v5-repo] | New features + Bug fixes      | 4.4, ^5.0        |
-
-[v1-repo]: https://github.com/scheb/two-factor-bundle/tree/1.x
-[v2-repo]: https://github.com/scheb/two-factor-bundle/tree/2.x
-[v3-repo]: https://github.com/scheb/two-factor-bundle/tree/3.x
-[v4-repo]: https://github.com/scheb/two-factor-bundle/tree/4.x
-[v5-repo]: https://github.com/scheb/2fa/tree/5.x
 
 License
 -------
